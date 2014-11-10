@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <color name="default_purple">#3F51B5</color>
+    <color name="statusbar_purple">#303F9F</color>
+    <color name="yellow_accent">#fbc02d</color>
+    <color name="yellow_accent_dark">#ffdca827</color>
+    <color name="green_accent">#ff00e82d</color>
+    <color name="green_accent_dark">#ff00c225</color>
+    <color name="blue_accent">#03a9f4</color>
+    <color name="blue_accent_dark">#ff0289c6</color>
+    <color name="pink_accent">#ff4081</color>
+    <color name="pink_accent_dark">#ffbb2e5e</color>
+    <color name="white">#ffffff</color>
+    <color name="light_gray">#fff5f5f5</color>
+    <color name="dark_gray">#ff222222</color>
+
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wheelzo</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawer_opened">Drawer Opened</string>
+    <string name="drawer_closed">Drawer Closed</string>
+
+    <string-array name="drawer_items">
+        <item>All Rides</item>
+        <item>My Rides</item>
+        <item>Search</item>
+        <item>Settings</item>
+    </string-array>
+
+</resources>
