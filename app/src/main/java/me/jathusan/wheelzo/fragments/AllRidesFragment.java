@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -80,6 +81,8 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             mAvailableRides.clear();
+            // TODO add fade out animation here
+            mRecyclerViewAdapter.notifyDataSetChanged();
             mSwipeRefreshLayout.setRefreshing(true);
         }
 
@@ -116,9 +119,10 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if (mAvailableRides == null || mAvailableRides.isEmpty()){
-                // update UI that no data was found
+                // TODO update UI that no data was found
             } else {
                 mRecyclerViewAdapter.notifyDataSetChanged();
+                // TODO add fade in animation here
             }
 
             if (mSwipeRefreshLayout.isRefreshing()){

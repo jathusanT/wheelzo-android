@@ -23,6 +23,7 @@ public class MainActivity extends BaseActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerItems;
+    private String mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
