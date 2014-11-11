@@ -46,6 +46,17 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         mRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
         mRecyclerViewAdapter = new RidesAdapter(mAvailableRides);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (mRecyclerView.canScrollVertically(-1)){
+                    mSwipeRefreshLayout.setEnabled(false);
+                } else {
+                    mSwipeRefreshLayout.setEnabled(true);
+                }
+            }
+        });
 
         return rootView;
     }
