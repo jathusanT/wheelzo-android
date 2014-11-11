@@ -40,8 +40,13 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeColors(R.color.pink_accent, R.color.yellow_accent, R.color.blue_accent, R.color.green_accent);
+        mSwipeRefreshLayout.setColorSchemeColors(
+                getResources().getColor(R.color.pink_accent_dark),
+                getResources().getColor(R.color.yellow_accent_dark),
+                getResources().getColor(R.color.blue_accent_dark),
+                getResources().getColor(R.color.green_accent_dark));
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rides_recycler_view);
+        // Improves Performance
         mRecyclerView.setHasFixedSize(true);
         mRecyclerViewLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
