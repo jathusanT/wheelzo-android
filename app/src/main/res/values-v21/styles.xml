@@ -2,7 +2,7 @@
 
     <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="android:colorPrimary">@color/default_purple</item>
-        <item name="android:colorPrimaryDark">@color/default_purple</item>
+        <item name="android:colorPrimaryDark">@color/yellow_accent</item>
         <item name="android:statusBarColor">@color/statusbar_purple</item>
         <item name="android:colorAccent">@color/yellow_accent</item>
     </style>
