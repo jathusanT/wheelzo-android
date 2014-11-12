@@ -4,7 +4,6 @@
         <item name="android:colorPrimary">@color/default_purple</item>
         <item name="android:statusBarColor">@color/statusbar_purple</item>
         <item name="android:colorAccent">@color/yellow_accent</item>
-        <item name="android:navigationBarColor">@color/navbar_purple</item>
     </style>
 
 </resources>
