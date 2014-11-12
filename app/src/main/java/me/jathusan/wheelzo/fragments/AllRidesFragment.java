@@ -10,8 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +20,7 @@ import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
 import me.jathusan.wheelzo.http.WheelzoHttpClient;
 import me.jathusan.wheelzo.objects.Ride;
+import me.jathusan.wheelzo.util.FormatUtil;
 
 public class AllRidesFragment extends android.support.v4.app.Fragment {
 
@@ -37,7 +36,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_all_rides, container, false);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(
@@ -46,8 +45,6 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
                 getResources().getColor(R.color.blue_accent_dark),
                 getResources().getColor(R.color.green_accent_dark));
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rides_recycler_view);
-        // Improves Performance
-        mRecyclerView.setHasFixedSize(true);
         mRecyclerViewLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
         mRecyclerViewAdapter = new RidesAdapter(mAvailableRides);
@@ -105,8 +102,8 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
                         ride.setOrigin(JSONRide.getString("origin"));
                         ride.setDestination(JSONRide.getString("destination"));
                         ride.setCapacity(JSONRide.getInt("capacity"));
-                        ride.setPrice(JSONRide.getLong("price"));
-                        ride.setStart(JSONRide.getString("start"));
+                        ride.setPrice(JSONRide.getDouble("price"));
+                        ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
                         // TODO: Dropoffs, Comments and Passengers
