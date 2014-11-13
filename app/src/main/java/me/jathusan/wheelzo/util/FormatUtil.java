@@ -20,6 +20,9 @@ public class FormatUtil {
     }
 
     public static String formatDollarAmount(double price) {
+        if (price == 0.0){
+            return "  Free  ";
+        }
         DecimalFormat df = new DecimalFormat("#.00");
         return "$" + df.format(price);
     }

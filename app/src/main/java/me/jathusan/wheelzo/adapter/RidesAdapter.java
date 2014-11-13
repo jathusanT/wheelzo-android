@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import me.jathusan.wheelzo.R;
-import me.jathusan.wheelzo.objects.Ride;
+import me.jathusan.wheelzo.framework.Ride;
 import me.jathusan.wheelzo.util.FormatUtil;
 
 public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> {

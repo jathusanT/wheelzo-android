@@ -1,12 +1,18 @@
 package me.jathusan.wheelzo.activities;
 
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.fragments.AllRidesFragment;
@@ -17,6 +23,7 @@ public class MainActivity extends BaseActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerItems;
+    private String mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +45,7 @@ public class MainActivity extends BaseActivity {
                 mDrawerLayout,
                 null,
                 R.string.drawer_opened,
-                R.string.drawer_closed) {
-        };
+                R.string.drawer_closed) {};
 
         // set te drawer listener here so the toggle will animate when the drawer is
         // slided out or in
