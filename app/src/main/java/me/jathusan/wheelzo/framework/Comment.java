@@ -1,4 +1,4 @@
-package me.jathusan.wheelzo.objects;
+package me.jathusan.wheelzo.framework;
 
 public class Comment {
     private int id;

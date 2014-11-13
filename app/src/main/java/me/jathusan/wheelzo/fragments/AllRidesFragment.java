@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
 import me.jathusan.wheelzo.http.WheelzoHttpClient;
-import me.jathusan.wheelzo.objects.Ride;
+import me.jathusan.wheelzo.framework.Ride;
 import me.jathusan.wheelzo.util.FormatUtil;
 
 public class AllRidesFragment extends android.support.v4.app.Fragment {
@@ -85,7 +85,9 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
             mAvailableRides.clear();
             // TODO add fade out animation here
             mRecyclerViewAdapter.notifyDataSetChanged();
-            mSwipeRefreshLayout.setRefreshing(true);
+            if (!mSwipeRefreshLayout.isRefreshing()){
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
         }
 
         @Override
@@ -120,15 +122,12 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            mSwipeRefreshLayout.setRefreshing(false);
             if (mAvailableRides == null || mAvailableRides.isEmpty()){
                 // TODO update UI that no data was found
             } else {
                 mRecyclerViewAdapter.notifyDataSetChanged();
                 // TODO add fade in animation here
-            }
-
-            if (mSwipeRefreshLayout.isRefreshing()){
-                mSwipeRefreshLayout.setRefreshing(false);
             }
         }
     }
