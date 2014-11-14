@@ -1,5 +1,7 @@
 package me.jathusan.wheelzo.framework;
 
+import android.graphics.Color;
+
 public class Ride {
     private int id;
     private int driverId;
@@ -13,6 +15,15 @@ public class Ride {
     private String[] passeners;
     private Comment[] comments;
     private boolean isPersonal;
+    private int color;
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 
     public String getLastUpdated() {
         return lastUpdated;

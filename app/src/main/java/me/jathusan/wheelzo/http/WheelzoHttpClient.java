@@ -2,17 +2,21 @@ package me.jathusan.wheelzo.http;
 
 import android.util.Log;
 
+import com.facebook.Session;
+
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class WheelzoHttpClient {
 
-    public static String getBufferResponse(String url) {
+    public static String getBufferResponse(String url, boolean requiresHeader) {
 
         StringBuilder builder = new StringBuilder();
 
@@ -21,6 +25,10 @@ public class WheelzoHttpClient {
 
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet(url);
+
+            if (requiresHeader) {
+                request.setHeader("FB_WHEELZO_TOKEN", Session.getActiveSession().getAccessToken());
+            }
 
             HttpResponse response = client.execute(request);
 

@@ -1,21 +1,22 @@
 package me.jathusan.wheelzo.activities;
 
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import com.facebook.AppEventsLogger;
 
 import me.jathusan.wheelzo.R;
-import me.jathusan.wheelzo.fragments.AllRidesFragment;
+import me.jathusan.wheelzo.adapter.WheelzoPagerAdapter;
 
 public class MainActivity extends BaseActivity {
 
@@ -23,19 +24,20 @@ public class MainActivity extends BaseActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerItems;
-    private String mTitle;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new AllRidesFragment())
-                    .commit();
-        }
+        // Facebook Analytics
+        AppEventsLogger.activateApp(this);
 
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setOffscreenPageLimit(3);
+        WheelzoPagerAdapter adapter = new WheelzoPagerAdapter(getSupportFragmentManager(), getActionBar());
+        mViewPager.setAdapter(adapter);
         mDrawerItemTitles = getResources().getStringArray(R.array.drawer_items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerItems = (ListView) findViewById(R.id.left_drawer);
@@ -45,12 +47,20 @@ public class MainActivity extends BaseActivity {
                 mDrawerLayout,
                 null,
                 R.string.drawer_opened,
-                R.string.drawer_closed) {};
+                R.string.drawer_closed) {
+        };
 
         // set te drawer listener here so the toggle will animate when the drawer is
         // slided out or in
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initializeActionBar();
+    }
+
+    @Override
+    protected void onPause() {
+        // Facebook analytics
+        AppEventsLogger.deactivateApp(this);
+        super.onPause();
     }
 
     @Override
@@ -71,5 +81,44 @@ public class MainActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initializeActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) {
+            Log.e("initializeActionBar()", "ActionBar was null");
+        }
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            @Override
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+            }
+
+            @Override
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+            }
+        };
+
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText("All Rides")
+                        .setTabListener(tabListener));
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText("My Rides")
+                        .setTabListener(tabListener));
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText("Lookup")
+                        .setTabListener(tabListener));
+        actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.default_purple)));
     }
 }

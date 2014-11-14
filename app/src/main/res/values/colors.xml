@@ -16,6 +16,7 @@
     <color name="white">#ffffff</color>
     <color name="light_gray">#fff5f5f5</color>
     <color name="dark_gray">#ff222222</color>
+    <color name="gray">#ff313131</color>
 
     <!-- Price Colors -->
     <color name="price0_5">#ff7957dc</color>

@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,9 +19,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import me.jathusan.wheelzo.R;
+import me.jathusan.wheelzo.adapter.RecyclerItemClickListener;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
-import me.jathusan.wheelzo.http.WheelzoHttpClient;
 import me.jathusan.wheelzo.framework.Ride;
+import me.jathusan.wheelzo.http.WheelzoHttpClient;
 import me.jathusan.wheelzo.util.FormatUtil;
 
 public class AllRidesFragment extends android.support.v4.app.Fragment {
@@ -48,12 +51,24 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         mRecyclerViewLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
         mRecyclerViewAdapter = new RidesAdapter(mAvailableRides);
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        LinearLayout expandedCard = (LinearLayout) view.findViewById(R.id.expandedCard);
+                        if (expandedCard.getVisibility() == View.VISIBLE){
+                            expandedCard.setVisibility(View.GONE);
+                        } else {
+                            expandedCard.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }));
+
+                mRecyclerView.setAdapter(mRecyclerViewAdapter);
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (mRecyclerView.canScrollVertically(-1)){
+                if (mRecyclerView.canScrollVertically(-1)) {
                     mSwipeRefreshLayout.setEnabled(false);
                 } else {
                     mSwipeRefreshLayout.setEnabled(true);
@@ -77,7 +92,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         new FetchRidesJob().execute();
     }
 
-    private class FetchRidesJob extends AsyncTask<Void,Void,Void>{
+    private class FetchRidesJob extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -85,18 +100,18 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
             mAvailableRides.clear();
             // TODO add fade out animation here
             mRecyclerViewAdapter.notifyDataSetChanged();
-            if (!mSwipeRefreshLayout.isRefreshing()){
+            if (!mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(true);
             }
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            String bufferResponse = WheelzoHttpClient.getBufferResponse(getString(R.string.base_url) + "rides");
-            if (bufferResponse != null){
+            String bufferResponse = WheelzoHttpClient.getBufferResponse(getString(R.string.base_url) + "rides", false);
+            if (bufferResponse != null) {
                 try {
                     JSONArray JSONRides = new JSONArray(bufferResponse);
-                    for (int i = 0; i < JSONRides.length(); i++){
+                    for (int i = 0; i < JSONRides.length(); i++) {
                         JSONObject JSONRide = JSONRides.getJSONObject(i);
                         Ride ride = new Ride();
                         ride.setId(JSONRide.getInt("id"));
@@ -108,10 +123,11 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
                         ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
+                        ride.setColor(getResources().getColor(getColorForPrice(ride.getPrice())));
                         // TODO: Dropoffs, Comments and Passengers
                         mAvailableRides.add(ride);
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     Log.e("FetchRidesJob", "Error Creating JSONArray");
                 }
             }
@@ -123,12 +139,32 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             mSwipeRefreshLayout.setRefreshing(false);
-            if (mAvailableRides == null || mAvailableRides.isEmpty()){
+            if (mAvailableRides == null || mAvailableRides.isEmpty()) {
                 // TODO update UI that no data was found
             } else {
                 mRecyclerViewAdapter.notifyDataSetChanged();
                 // TODO add fade in animation here
             }
+        }
+    }
+
+    private int getColorForPrice(double price) {
+        int intPrice = (int) price;
+        Log.i("Price", "" + intPrice);
+        if (intPrice >= 0 && intPrice < 5) {
+            return R.color.price0_5;
+        } else if (intPrice >= 5 && intPrice < 10) {
+            return R.color.price5_10;
+        } else if (intPrice >= 10 && intPrice < 15) {
+            return R.color.price10_15;
+        } else if (intPrice >= 15 && intPrice < 20) {
+            return R.color.price15_20;
+        } else if (intPrice >= 20 && intPrice < 25) {
+            return R.color.price20_25;
+        } else if (intPrice >= 25 && intPrice < 30) {
+            return R.color.price25_30;
+        } else {
+            return R.color.price30_35;
         }
     }
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import me.jathusan.wheelzo.util.FormatUtil;
 
 public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> {
     private ArrayList<Ride> mDataset;
+    public LinearLayout mExpandedView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mDescription;
@@ -37,6 +39,8 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     public RidesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
+        mExpandedView = (LinearLayout) view.findViewById(R.id.expandedCard);
+        mExpandedView.setVisibility(View.GONE);
         return viewHolder;
     }
 
@@ -45,31 +49,13 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
         Ride currentRide = mDataset.get(position);
         holder.mDescription.setText(currentRide.getOrigin() + " to " + mDataset.get(position).getDestination());
         holder.mPrice.setText(FormatUtil.formatDollarAmount(currentRide.getPrice()));
-        //holder.mPrice.setBackgroundColor(getColorForPrice(currentRide.getPrice()));
+        holder.mPrice.setBackgroundColor(currentRide.getColor());
         holder.mDate.setText(currentRide.getStart());
     }
-
-    private int getColorForPrice(double price) {
-        Log.i("Price", price + "");
-        if (price >= 0.0 && price < 5.0) {
-            return R.color.price0_5;
-        } else if (price >= 5.0 && price < 10.0) {
-            return R.color.price5_10;
-        } else if (price >= 10.0 && price < 15.0) {
-            return R.color.price10_15;
-        } else if (price >= 15.0 && price < 20.0) {
-            return R.color.price15_20;
-        } else if (price >= 20.0 && price < 25.0) {
-            return R.color.price20_25;
-        } else if (price >= 25.0 && price < 30.0) {
-            return R.color.price25_30;
-        } else {
-            return R.color.price30_35;
-        }
-    }
-
     @Override
     public int getItemCount() {
         return mDataset.size();
     }
+
+
 }
