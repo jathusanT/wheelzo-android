@@ -16,7 +16,11 @@ import java.io.InputStreamReader;
 
 public class WheelzoHttpClient {
 
+    private static final String WHEELZO_URL = "http://www.staging.wheelzo.com/api/v2/";
+
     public static String getBufferResponse(String url, boolean requiresHeader) {
+
+        url = WHEELZO_URL + url;
 
         StringBuilder builder = new StringBuilder();
 

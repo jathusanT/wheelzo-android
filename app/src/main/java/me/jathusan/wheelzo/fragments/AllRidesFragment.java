@@ -107,7 +107,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String bufferResponse = WheelzoHttpClient.getBufferResponse(getString(R.string.base_url) + "rides", false);
+            String bufferResponse = WheelzoHttpClient.getBufferResponse("rides", false);
             if (bufferResponse != null) {
                 try {
                     JSONArray JSONRides = new JSONArray(bufferResponse);
