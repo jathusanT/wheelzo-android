@@ -8,14 +8,15 @@ import me.jathusan.wheelzo.R;
 
 public class RideInfoActivity extends BaseActivity {
 
-    private TextView mTitle, mInfo;
+    private TextView mOrigin, mDestination, mInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride_info);
 
-        mTitle = (TextView) findViewById(R.id.ride_title);
+        mOrigin = (TextView) findViewById(R.id.ride_origin);
+        mDestination = (TextView) findViewById(R.id.ride_destination);
         mInfo = (TextView) findViewById(R.id.ride_description);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

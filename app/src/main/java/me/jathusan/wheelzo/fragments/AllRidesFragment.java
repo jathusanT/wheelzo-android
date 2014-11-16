@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -34,6 +35,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
     private ArrayList<Ride> mAvailableRides = new ArrayList<Ride>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mNoResults;
+    private ProgressBar mSpinner;
 
     public AllRidesFragment() {
     }
@@ -45,6 +47,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
 
         mNoResults = (TextView) rootView.findViewById(R.id.noResults);
         mNoResults.setVisibility(View.GONE);
+        mSpinner = (ProgressBar) rootView.findViewById(R.id.spinner);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(
                 getResources().getColor(R.color.pink_accent_dark),
@@ -61,7 +64,6 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
                 startActivity(new Intent(getActivity(), RideInfoActivity.class));
             }
         }));
-
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -123,7 +125,6 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
                         ride.setColor(getResources().getColor(getColorForPrice(ride.getPrice())));
-                        // TODO: Dropoffs, Comments and Passengers
                         mAvailableRides.add(ride);
                     }
                 } catch (Exception e) {
@@ -138,6 +139,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             mSwipeRefreshLayout.setRefreshing(false);
+            mSpinner.setVisibility(View.GONE);
             if (mAvailableRides == null || mAvailableRides.isEmpty()) {
                 mNoResults.setText("No Rides Were Found");
                 mNoResults.setVisibility(View.VISIBLE);

@@ -12,23 +12,35 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <com.facebook.widget.ProfilePictureView
-            android:id="@+id/selection_profile_pic"
-            android:layout_width="wrap_content"
+        <me.jathusan.wheelzo.framework.RoundedImageView
+            android:id="@+id/rounded_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/defaultuser" />
+
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal" />
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Logged in as:"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/user_account"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textAllCaps="true"
-            android:textStyle="bold"
+            android:layout_marginTop="2dp"
+            android:text="Loading..."
             android:gravity="center"
+            android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="12dp" />
+            android:textSize="15dp"
+            android:textStyle="bold" />
 
         <com.facebook.widget.LoginButton
             android:id="@+id/authButton"
@@ -38,10 +50,11 @@
             android:layout_marginTop="30dp" />
 
         <Button
+            android:layout_marginTop="10dp"
             android:id="@+id/create_button"
-            android:text="CREATE RIDE"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="CREATE RIDE" />
 
     </LinearLayout>
 

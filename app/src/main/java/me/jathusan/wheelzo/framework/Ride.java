@@ -12,8 +12,6 @@ public class Ride {
     private String start;
     private String lastUpdated;
     private String[] dropOffs;
-    private String[] passeners;
-    private Comment[] comments;
     private boolean isPersonal;
     private int color;
 
@@ -95,22 +93,6 @@ public class Ride {
 
     public void setDropOffs(String[] dropOffs) {
         this.dropOffs = dropOffs;
-    }
-
-    public String[] getPasseners() {
-        return passeners;
-    }
-
-    public void setPasseners(String[] passeners) {
-        this.passeners = passeners;
-    }
-
-    public Comment[] getComments() {
-        return comments;
-    }
-
-    public void setComments(Comment[] comments) {
-        this.comments = comments;
     }
 
     public boolean isPersonal() {

@@ -2,14 +2,7 @@ package me.jathusan.wheelzo.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.Request;
@@ -30,11 +22,13 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-import com.facebook.widget.ProfilePictureView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -44,6 +38,7 @@ import me.jathusan.wheelzo.activities.RideInfoActivity;
 import me.jathusan.wheelzo.adapter.RecyclerItemClickListener;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
 import me.jathusan.wheelzo.framework.Ride;
+import me.jathusan.wheelzo.framework.RoundedImageView;
 import me.jathusan.wheelzo.http.WheelzoHttpClient;
 import me.jathusan.wheelzo.util.FormatUtil;
 
@@ -53,7 +48,6 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
     private LoginButton mLoginButton;
     private UiLifecycleHelper mUiHelper;
     private TextView mUserAccount;
-    private ProfilePictureView mProfilePicture;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mRecyclerViewAdapter;
     private RecyclerView.LayoutManager mRecyclerViewLayoutManager;
@@ -61,6 +55,9 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
     private static final int REAUTH_ACTIVITY_CODE = 100;
     private LoginButton mFacebookLoginButton;
     private Button mCreateRideButton;
+    private String mFacebookId;
+    private RoundedImageView mFacebookPicture;
+    private Bitmap mLoadedImage;
 
     public MyAccountFragment() {
     }
@@ -99,9 +96,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         mLoginButton.setFragment(this);
         mLoginButton.setReadPermissions(Arrays.asList("public_profile"));
         mUserAccount = (TextView) rootView.findViewById(R.id.user_account);
-        mProfilePicture = (ProfilePictureView) rootView.findViewById(R.id.selection_profile_pic);
-        mProfilePicture.setCropped(true);
-        mProfilePicture.setVisibility(View.GONE);
+        mFacebookPicture = (RoundedImageView) rootView.findViewById(R.id.rounded_profile);
         mFacebookLoginButton = (LoginButton) rootView.findViewById(R.id.authButton);
         mCreateRideButton = (Button) rootView.findViewById(R.id.create_button);
         mCreateRideButton.setOnClickListener(new View.OnClickListener() {
@@ -119,8 +114,9 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()) {
             mFacebookLoginButton.setVisibility(View.GONE);
             new FetchRidesJob().execute();
+            new FetchFacebookImage("http://graph.facebook.com/100002506803879/picture?width=150&height=150", mFacebookPicture).execute();
         } else {
-            mProfilePicture.setVisibility(View.GONE);
+            mFacebookPicture.setVisibility(View.GONE);
             mUserAccount.setVisibility(View.GONE);
         }
     }
@@ -173,8 +169,12 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                     public void onCompleted(GraphUser user, Response response) {
                         if (session == Session.getActiveSession()) {
                             if (user != null) {
-                                mProfilePicture.setProfileId(user.getId());
+                                //mProfilePicture.setProfileId(user.getId());
                                 mUserAccount.setText(user.getName());
+                                mFacebookId = user.getId();
+
+                                Log.i("Facebook", "ID = " + mFacebookId);
+                                new FetchFacebookImage("https://graph.facebook.com/" + mFacebookId + "/picture?width=200&height=200", mFacebookPicture).execute();
                             }
                         }
                         if (response.getError() != null) {
@@ -192,12 +192,12 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
 
         if (state.isOpened()) {
             mFacebookLoginButton.setVisibility(View.GONE);
-            mProfilePicture.setVisibility(View.VISIBLE);
+            mFacebookPicture.setVisibility(View.VISIBLE);
             mUserAccount.setVisibility(View.VISIBLE);
             new FetchRidesJob().execute();
             Log.i(TAG, "Logged in...");
         } else if (state.isClosed()) {
-            mProfilePicture.setVisibility(View.GONE);
+            mFacebookPicture.setVisibility(View.GONE);
             mUserAccount.setVisibility(View.GONE);
             mFacebookLoginButton.setVisibility(View.VISIBLE);
             Log.i(TAG, "Logged out...");
@@ -231,7 +231,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                         ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
-                        ride.setColor(getResources().getColor(R.color.pink_accent));
+                        ride.setColor(getResources().getColor(R.color.green_accent_dark));
                         // TODO: Dropoffs, Comments and Passengers
                         mAvailableRides.add(ride);
                     }
@@ -250,6 +250,42 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                 // Update UI For No Rides
             } else {
                 mRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private class FetchFacebookImage extends AsyncTask<Void, Void, Bitmap> {
+
+        private String url;
+        private RoundedImageView imageView;
+
+        private FetchFacebookImage(String url, RoundedImageView imageView) {
+            this.url = url;
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            try {
+                URL urlConnection = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                return myBitmap;
+            } catch (Exception e) {
+                Log.e("Facebook Image Load", "Exception while downloading Faceobok image", e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            if (bitmap != null){
+                imageView.setImageBitmap(bitmap);
             }
         }
     }
