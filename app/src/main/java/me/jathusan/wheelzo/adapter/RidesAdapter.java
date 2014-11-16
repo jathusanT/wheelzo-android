@@ -16,7 +16,6 @@ import me.jathusan.wheelzo.util.FormatUtil;
 
 public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> {
     private ArrayList<Ride> mDataset;
-    public LinearLayout mExpandedView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mDescription;
@@ -39,8 +38,6 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     public RidesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
-        mExpandedView = (LinearLayout) view.findViewById(R.id.expandedCard);
-        mExpandedView.setVisibility(View.GONE);
         return viewHolder;
     }
 

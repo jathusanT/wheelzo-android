@@ -6,7 +6,18 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_gray">
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/noResults"
+            android:textSize="15dp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/dark_gray"
+            android:layout_width="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:gravity="center"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rides_recycler_view"

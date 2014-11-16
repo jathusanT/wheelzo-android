@@ -1,5 +1,6 @@
 package me.jathusan.wheelzo.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import me.jathusan.wheelzo.R;
+import me.jathusan.wheelzo.activities.RideInfoActivity;
 import me.jathusan.wheelzo.adapter.RecyclerItemClickListener;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
 import me.jathusan.wheelzo.framework.Ride;
@@ -32,6 +33,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
     private RecyclerView.LayoutManager mRecyclerViewLayoutManager;
     private ArrayList<Ride> mAvailableRides = new ArrayList<Ride>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView mNoResults;
 
     public AllRidesFragment() {
     }
@@ -41,6 +43,8 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_all_rides, container, false);
 
+        mNoResults = (TextView) rootView.findViewById(R.id.noResults);
+        mNoResults.setVisibility(View.GONE);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(
                 getResources().getColor(R.color.pink_accent_dark),
@@ -52,18 +56,13 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         mRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
         mRecyclerViewAdapter = new RidesAdapter(mAvailableRides);
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        LinearLayout expandedCard = (LinearLayout) view.findViewById(R.id.expandedCard);
-                        if (expandedCard.getVisibility() == View.VISIBLE){
-                            expandedCard.setVisibility(View.GONE);
-                        } else {
-                            expandedCard.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }));
+            @Override
+            public void onItemClick(View view, int position) {
+                startActivity(new Intent(getActivity(), RideInfoActivity.class));
+            }
+        }));
 
-                mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -98,7 +97,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             mAvailableRides.clear();
-            // TODO add fade out animation here
+            mNoResults.setVisibility(View.GONE);
             mRecyclerViewAdapter.notifyDataSetChanged();
             if (!mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(true);
@@ -140,10 +139,10 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
             super.onPostExecute(aVoid);
             mSwipeRefreshLayout.setRefreshing(false);
             if (mAvailableRides == null || mAvailableRides.isEmpty()) {
-                // TODO update UI that no data was found
+                mNoResults.setText("No Rides Were Found");
+                mNoResults.setVisibility(View.VISIBLE);
             } else {
                 mRecyclerViewAdapter.notifyDataSetChanged();
-                // TODO add fade in animation here
             }
         }
     }
