@@ -77,6 +77,7 @@ public class WheelzoHttpClient {
             post.setEntity(rideEntity);
             post.setHeader("Accept", "application/json");
             post.setHeader(HTTP.CONTENT_TYPE, "application/json");
+            Log.i("Token", Session.getActiveSession().getAccessToken());
             post.setHeader("FB_WHEELZO_TOKEN", Session.getActiveSession().getAccessToken());
             HttpResponse response = client.execute(post);
 

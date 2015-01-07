@@ -19,16 +19,16 @@ public class WheelzoPagerAdapter extends FragmentStatePagerAdapter {
         switch (i) {
             case 0:
                 return new AllRidesFragment();
-            case 1:
-                return new MyAccountFragment();
             default:
-                return new SearchFragment();
+                return new MyAccountFragment();
+//            default:
+//                return new SearchFragment();
         }
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
 }

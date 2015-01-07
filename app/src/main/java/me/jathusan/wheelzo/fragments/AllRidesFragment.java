@@ -47,7 +47,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
 
         mNoResults = (TextView) rootView.findViewById(R.id.noResults);
         mNoResults.setVisibility(View.GONE);
-        mSpinner = (ProgressBar) rootView.findViewById(R.id.spinner);
+        mSpinner = (ProgressBar) rootView.findViewById(R.id.my_spinner);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(
                 getResources().getColor(R.color.pink_accent_dark),

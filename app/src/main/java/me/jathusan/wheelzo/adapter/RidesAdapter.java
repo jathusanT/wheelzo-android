@@ -44,7 +44,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Ride currentRide = mDataset.get(position);
-        holder.mDescription.setText(currentRide.getOrigin() + " to " + mDataset.get(position).getDestination());
+        holder.mDescription.setText("From:" + currentRide.getOrigin() + "\nTo: " + mDataset.get(position).getDestination());
         holder.mPrice.setText(FormatUtil.formatDollarAmount(currentRide.getPrice()));
         holder.mPrice.setBackgroundColor(currentRide.getColor());
         holder.mDate.setText(currentRide.getStart());

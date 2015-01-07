@@ -28,9 +28,9 @@ public class CreateRideActivity extends BaseActivity {
     }
 
     private JSONObject createJSONRide(String origin, String destination, String departureDate,
-                                      String departureTime, int capacity, double price, String[] dropOffs){
+                                      String departureTime, int capacity, double price, String[] dropOffs) {
         JSONObject object = new JSONObject();
-        try{
+        try {
             object.put("origin", origin);
             object.put("destination", destination);
             object.put("departureDate", departureDate);
@@ -38,11 +38,11 @@ public class CreateRideActivity extends BaseActivity {
             object.put("capacity", capacity);
             object.put("price", price);
             JSONArray dropOffArray = new JSONArray();
-            for (String dropOff : dropOffs){
+            for (String dropOff : dropOffs) {
                 dropOffArray.put(dropOff);
             }
             object.put("dropOffs", dropOffArray);
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e("createJSONRide", "Error Creating Ride", e);
         }
         return object;
@@ -52,7 +52,7 @@ public class CreateRideActivity extends BaseActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            JSONObject myRide = createJSONRide("Mobile One", "Mobile Two", "2014-11-20", "00:00:00", 2, 10, new String[]{"Waterloo","Toronto"});
+            JSONObject myRide = createJSONRide("Mobile One", "Mobile Two", "2014-11-20", "00:00:00", 2, 10, new String[]{"Waterloo", "Toronto"});
             WheelzoHttpClient.createRide(myRide);
             return null;
         }
