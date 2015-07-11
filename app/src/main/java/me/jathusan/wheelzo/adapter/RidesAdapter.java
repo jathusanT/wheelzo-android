@@ -1,11 +1,9 @@
 package me.jathusan.wheelzo.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,14 +16,15 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     private ArrayList<Ride> mDataset;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mDescription;
+        public TextView mDesintation, mOrigin;
         public TextView mPrice;
         public TextView mDate;
 
         public ViewHolder(View view) {
             super(view);
             mPrice = (TextView) view.findViewById(R.id.price_text);
-            mDescription = (TextView) view.findViewById(R.id.info_text);
+            mDesintation = (TextView) view.findViewById(R.id.dest_text);
+            mOrigin = (TextView) view.findViewById(R.id.origin_text);
             mDate = (TextView) view.findViewById(R.id.date_text);
         }
     }
@@ -44,7 +43,8 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Ride currentRide = mDataset.get(position);
-        holder.mDescription.setText("From:" + currentRide.getOrigin() + "\nTo: " + mDataset.get(position).getDestination());
+        holder.mDesintation.setText(currentRide.getDestination());
+        holder.mOrigin.setText("Departing from " + currentRide.getOrigin());
         holder.mPrice.setText(FormatUtil.formatDollarAmount(currentRide.getPrice()));
         holder.mPrice.setBackgroundColor(currentRide.getColor());
         holder.mDate.setText(currentRide.getStart());

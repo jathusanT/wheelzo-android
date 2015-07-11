@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Wheelzo Beta</string>
+    <string name="app_name">Wheelzo</string>
     <string name="search_title">Search for a Rids</string>
     <string name="create_title">Create a Ride</string>
     <string name="ride_info">Ride Information</string>
@@ -9,12 +9,5 @@
     <string name="drawer_opened">Drawer Opened</string>
     <string name="drawer_closed">Drawer Closed</string>
     <string name="facebook_app_id">282192178572651</string>
-
-    <string-array name="drawer_items">
-        <item>All Rides</item>
-        <item>My Rides</item>
-        <item>Search</item>
-        <item>Settings</item>
-    </string-array>
 
 </resources>

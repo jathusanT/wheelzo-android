@@ -15,10 +15,11 @@ import com.facebook.AppEventsLogger;
 
 import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.adapter.WheelzoPagerAdapter;
+import me.jathusan.wheelzo.fragments.AllRidesFragment;
+import me.jathusan.wheelzo.fragments.MyAccountFragment;
 
 public class MainActivity extends BaseActivity {
     private ViewPager mViewPager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,15 @@ public class MainActivity extends BaseActivity {
         AppEventsLogger.activateApp(this);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setOffscreenPageLimit(3);
+        setupViewPager();
+        initializeActionBar();
+    }
+
+    private void setupViewPager() {
+        mViewPager.setOffscreenPageLimit(2);
         WheelzoPagerAdapter adapter = new WheelzoPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new AllRidesFragment());
+        adapter.addFragment(new MyAccountFragment());
         mViewPager.setAdapter(adapter);
         mViewPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -71,7 +79,6 @@ public class MainActivity extends BaseActivity {
         if (actionBar == null) {
             Log.e("initializeActionBar()", "ActionBar was null");
         }
-        //actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         addTabsToActionBar(actionBar);
     }

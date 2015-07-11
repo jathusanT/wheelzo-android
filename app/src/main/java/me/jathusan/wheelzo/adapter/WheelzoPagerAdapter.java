@@ -4,31 +4,29 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import me.jathusan.wheelzo.fragments.AllRidesFragment;
-import me.jathusan.wheelzo.fragments.MyAccountFragment;
-import me.jathusan.wheelzo.fragments.SearchFragment;
+import java.util.ArrayList;
 
 public class WheelzoPagerAdapter extends FragmentStatePagerAdapter {
+
+    private static final String TAG = "WheelzoPagerAdapter";
+    private ArrayList<Fragment> mFragmentList = new ArrayList<Fragment>();
 
     public WheelzoPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
-    public Fragment getItem(int i) {
-        switch (i) {
-            case 0:
-                return new AllRidesFragment();
-            default:
-                return new MyAccountFragment();
-//            default:
-//                return new SearchFragment();
-        }
+    public Fragment getItem(int position) {
+        return mFragmentList.get(position);
+    }
+
+    public void addFragment(Fragment fragment) {
+        mFragmentList.add(fragment);
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return mFragmentList.size();
     }
 
 }

@@ -13,8 +13,8 @@
     <color name="blue_accent_dark">#ff0289c6</color>
     <color name="pink_accent">#ff4081</color>
     <color name="pink_accent_dark">#ffbb2e5e</color>
-    <color name="white">#ffffff</color>
-    <color name="light_gray">#fff5f5f5</color>
+    <color name="white">#fbfafb</color>
+    <color name="light_gray">#f0ecf1</color>
     <color name="dark_gray">#ff222222</color>
     <color name="gray">#ff313131</color>
 
