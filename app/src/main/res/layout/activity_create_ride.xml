@@ -1,22 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:background="@color/pink_accent"
-        android:layout_height="250dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp">
 
-        <TextView
+        <LinearLayout
+            android:padding="5dp"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:textSize="25dp"
-            android:textColor="@color/white"
-            android:text="Create a Ride"/>
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_from" />
+
+            <EditText
+                android:id="@+id/origin_edit_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Origin" />
         </LinearLayout>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_to" />
+
+            <EditText
+                android:id="@+id/dest_edit_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Destination" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_date" />
+
+            <EditText
+                android:id="@+id/date_edit_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Departure Date" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_time" />
+
+            <EditText
+                android:id="@+id/time_edit_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Departure Time" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_capacity" />
+
+            <EditText
+                android:id="@+id/capacity_edit_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Capacity"
+                android:numeric="integer" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_price" />
+
+            <EditText
+                android:id="@+id/price_edit_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Price" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

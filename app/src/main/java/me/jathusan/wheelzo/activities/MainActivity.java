@@ -8,7 +8,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+<<<<<<< Updated upstream
 import android.support.v7.app.ActionBarDrawerToggle;
+=======
+import android.support.v7.widget.Toolbar;
+>>>>>>> Stashed changes
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +24,8 @@ import com.facebook.AppEventsLogger;
 
 import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.adapter.WheelzoPagerAdapter;
+import me.jathusan.wheelzo.fragments.AllRidesFragment;
+import me.jathusan.wheelzo.fragments.MyAccountFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -28,7 +34,6 @@ public class MainActivity extends BaseActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerItems;
     private ViewPager mViewPager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +44,15 @@ public class MainActivity extends BaseActivity {
         AppEventsLogger.activateApp(this);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        setupViewPager();
+        initializeActionBar();
+    }
+
+    private void setupViewPager() {
         mViewPager.setOffscreenPageLimit(3);
         WheelzoPagerAdapter adapter = new WheelzoPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new AllRidesFragment(), "All Rides");
+        adapter.addFragment(new MyAccountFragment(), "My Account");
         mViewPager.setAdapter(adapter);
         mViewPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -49,6 +61,7 @@ public class MainActivity extends BaseActivity {
                         getSupportActionBar().setSelectedNavigationItem(position);
                     }
                 });
+<<<<<<< Updated upstream
         mDrawerItemTitles = getResources().getStringArray(R.array.drawer_items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerItems = (ListView) findViewById(R.id.left_drawer);
@@ -65,6 +78,8 @@ public class MainActivity extends BaseActivity {
         // slided out or in
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         initializeActionBar();
+=======
+>>>>>>> Stashed changes
     }
 
     @Override
@@ -110,7 +125,10 @@ public class MainActivity extends BaseActivity {
         if (actionBar == null) {
             Log.e("initializeActionBar()", "ActionBar was null");
         }
+<<<<<<< Updated upstream
         actionBar.setDisplayHomeAsUpEnabled(true);
+=======
+>>>>>>> Stashed changes
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         addTabsToActionBar(actionBar);
     }
