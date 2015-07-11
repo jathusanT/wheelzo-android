@@ -8,40 +8,68 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="@color/default_purple"
-        android:orientation="vertical">
+        android:background="@color/statusbar_purple"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <me.jathusan.wheelzo.framework.RoundedImageView
+            android:id="@+id/driver_picture"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/defaultuser" />
 
         <TextView
             android:id="@+id/ride_origin"
-            android:text="Scarborough Town Center"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@color/white"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="Scarborough Town Center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:textStyle="bold" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_gravity="center"
+            android:layout_margin="5dp"
             android:src="@drawable/ic_down"/>
 
         <TextView
             android:id="@+id/ride_destination"
-            android:text="Waterloo, DC Lobby"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@color/white"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Waterloo, DC Lobby"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:paddingBottom="20dp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/time_price"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Saturday, November 10, 2014 for $15"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:paddingBottom="20dp"
+            android:textStyle="bold"
+            />
+
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/ride_description"
+    <ListView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="fill_parent"></ListView>
 
 </LinearLayout>

@@ -7,7 +7,7 @@
         android:id="@+id/user_info"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/default_purple"
+        android:background="@color/statusbar_purple"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp">
@@ -35,8 +35,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Loading..."
             android:gravity="center"
+            android:text="Loading..."
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="15dp"
@@ -49,14 +49,37 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp" />
 
-        <Button
-            android:layout_marginTop="10dp"
-            android:id="@+id/create_button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="CREATE RIDE" />
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/create_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="CREATE RIDE" />
+
+            <Button
+                android:id="@+id/rep_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0 REP" />
+        </LinearLayout>
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/my_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_info"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:paddingTop="50dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_rides_recycler_view"

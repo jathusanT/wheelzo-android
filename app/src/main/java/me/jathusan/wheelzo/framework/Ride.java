@@ -1,6 +1,6 @@
 package me.jathusan.wheelzo.framework;
 
-import android.graphics.Color;
+import java.util.ArrayList;
 
 public class Ride {
     private int id;
@@ -11,7 +11,7 @@ public class Ride {
     private double price;
     private String start;
     private String lastUpdated;
-    private String[] dropOffs;
+    private ArrayList<String> dropOffs = new ArrayList<String>();
     private boolean isPersonal;
     private int color;
 
@@ -87,12 +87,16 @@ public class Ride {
         this.start = start;
     }
 
-    public String[] getDropOffs() {
+    public ArrayList<String> getDropOffs() {
         return dropOffs;
     }
 
-    public void setDropOffs(String[] dropOffs) {
+    public void setDropOffs(ArrayList<String> dropOffs) {
         this.dropOffs = dropOffs;
+    }
+
+    public void addDropoff(String dropOff) {
+        dropOffs.add(dropOff);
     }
 
     public boolean isPersonal() {

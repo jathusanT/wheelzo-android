@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.Request;
@@ -55,9 +56,10 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
     private static final int REAUTH_ACTIVITY_CODE = 100;
     private LoginButton mFacebookLoginButton;
     private Button mCreateRideButton;
-    private String mFacebookId;
+    private String mFacebookId = null;
     private RoundedImageView mFacebookPicture;
-    private Bitmap mLoadedImage;
+    private ProgressBar mSpinner;
+    private boolean imageLoaded, modifyingDataSet = false;
 
     public MyAccountFragment() {
     }
@@ -92,6 +94,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        mSpinner = (ProgressBar) rootView.findViewById(R.id.my_spinner);
         mLoginButton = (LoginButton) rootView.findViewById(R.id.authButton);
         mLoginButton.setFragment(this);
         mLoginButton.setReadPermissions(Arrays.asList("public_profile"));
@@ -102,9 +105,11 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         mCreateRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                modifyingDataSet = true;
                 startActivity(new Intent(getActivity(), CreateRideActivity.class));
             }
         });
+
         return rootView;
     }
 
@@ -113,8 +118,11 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()) {
             mFacebookLoginButton.setVisibility(View.GONE);
+            mSpinner.setVisibility(View.VISIBLE);
             new FetchRidesJob().execute();
-            new FetchFacebookImage("http://graph.facebook.com/100002506803879/picture?width=150&height=150", mFacebookPicture).execute();
+            if (!imageLoaded && mFacebookId != null) {
+                new FetchFacebookImage("http://graph.facebook.com/" + mFacebookId + "/picture?width=150&height=150", mFacebookPicture).execute();
+            }
         } else {
             mFacebookPicture.setVisibility(View.GONE);
             mUserAccount.setVisibility(View.GONE);
@@ -135,8 +143,9 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         // For scenarios where the main activity is launched and user
         // session is not null, the session state change notification
         // may not be triggered. Trigger it if it's open/closed.
-        if (session != null && (session.isOpened() || session.isClosed())) {
+        if (modifyingDataSet && session != null && (session.isOpened() || session.isClosed())) {
             onSessionStateChange(session, session.getState(), null);
+            modifyingDataSet = false;
         }
         mUiHelper.onResume();
     }
@@ -173,7 +182,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                                 mUserAccount.setText(user.getName());
                                 mFacebookId = user.getId();
 
-                                Log.i("Facebook", "ID = " + mFacebookId);
+                                Log.i(TAG, "Facebook ID = " + mFacebookId);
                                 new FetchFacebookImage("https://graph.facebook.com/" + mFacebookId + "/picture?width=200&height=200", mFacebookPicture).execute();
                             }
                         }
@@ -194,6 +203,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
             mFacebookLoginButton.setVisibility(View.GONE);
             mFacebookPicture.setVisibility(View.VISIBLE);
             mUserAccount.setVisibility(View.VISIBLE);
+            mSpinner.setVisibility(View.VISIBLE);
             new FetchRidesJob().execute();
             Log.i(TAG, "Logged in...");
         } else if (state.isClosed()) {
@@ -232,7 +242,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
                         ride.setColor(getResources().getColor(R.color.green_accent_dark));
-                        // TODO: Dropoffs, Comments and Passengers
+                        // TODO: Dropoffs
                         mAvailableRides.add(ride);
                     }
                 } catch (Exception e) {
@@ -246,6 +256,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            mSpinner.setVisibility(View.GONE);
             if (mAvailableRides == null || mAvailableRides.isEmpty()) {
                 // Update UI For No Rides
             } else {
@@ -284,8 +295,9 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            if (bitmap != null){
+            if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);
+                imageLoaded = true;
             }
         }
     }
