@@ -19,6 +19,8 @@ import me.jathusan.wheelzo.fragments.AllRidesFragment;
 import me.jathusan.wheelzo.fragments.MyAccountFragment;
 
 public class MainActivity extends BaseActivity {
+
+    private static final String TAG = "MainActivity";
     private ViewPager mViewPager;
 
     @Override
@@ -47,8 +49,6 @@ public class MainActivity extends BaseActivity {
                         getSupportActionBar().setSelectedNavigationItem(position);
                     }
                 });
-
-        initializeActionBar();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity {
     private void initializeActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) {
-            Log.e("initializeActionBar()", "ActionBar was null");
+            Log.e(TAG, "Failed to initialize actionbar -- actionbar was null");
         }
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         addTabsToActionBar(actionBar);
