@@ -14,6 +14,7 @@
     <color name="pink_accent">#ff4081</color>
     <color name="pink_accent_dark">#ffbb2e5e</color>
     <color name="white">#fbfafb</color>
+    <color name="medium_gray">#5a595b</color>
     <color name="light_gray">#f0ecf1</color>
     <color name="dark_gray">#ff222222</color>
     <color name="gray">#ff313131</color>

@@ -23,7 +23,7 @@ public class RideInfoActivity extends BaseActivity {
     private static final String TAG = "RideInfoActivity";
 
     private static final String RIDE_PARCELABLE_KEY = "me.jathusan.wheelzo.Ride";
-    private TextView mOrigin, mDestination, mDate, mTime, mCapacity, mPrice, mDriverName;
+    private TextView mOrigin, mDestination, mDate, mCapacity, mPrice, mDriverName;
     private Ride mRide;
     private RoundedImageView mDriverPicture;
 
@@ -55,7 +55,6 @@ public class RideInfoActivity extends BaseActivity {
         mOrigin = (TextView) findViewById(R.id.origin_text);
         mDestination = (TextView) findViewById(R.id.dest_text);
         mDate = (TextView) findViewById(R.id.date_text);
-        mTime = (TextView) findViewById(R.id.time_text);
         mCapacity = (TextView) findViewById(R.id.cap_text);
         mPrice = (TextView) findViewById(R.id.price_text);
 
@@ -66,7 +65,15 @@ public class RideInfoActivity extends BaseActivity {
     }
 
     private void setupInterface() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getSupportActionBar().setElevation(0);
+        }
         mDriverName.setText(mRide.getDriverName());
+        mOrigin.setText(mRide.getOrigin());
+        mDestination.setText(mRide.getDestination());
+        mDate.setText(mRide.getStart());
+        //mCapacity.setText(mRide.getCapacity());
+        mPrice.setText("$" + mRide.getPrice());
     }
 
     @Override
