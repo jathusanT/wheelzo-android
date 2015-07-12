@@ -19,10 +19,7 @@ import android.widget.TextView;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,10 +28,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.activities.CreateRideActivity;
+import me.jathusan.wheelzo.activities.LoginActivity;
 import me.jathusan.wheelzo.activities.RideInfoActivity;
 import me.jathusan.wheelzo.adapter.RecyclerItemClickListener;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
@@ -46,30 +43,19 @@ import me.jathusan.wheelzo.util.FormatUtil;
 public class MyAccountFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "MyRidesFragment";
-    private LoginButton mLoginButton;
-    private UiLifecycleHelper mUiHelper;
     private TextView mUserAccount;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mRecyclerViewAdapter;
     private RecyclerView.LayoutManager mRecyclerViewLayoutManager;
     private ArrayList<Ride> mAvailableRides = new ArrayList<Ride>();
-    private static final int REAUTH_ACTIVITY_CODE = 100;
-    private LoginButton mFacebookLoginButton;
     private Button mCreateRideButton;
     private String mFacebookId = null;
     private RoundedImageView mFacebookPicture;
     private ProgressBar mSpinner;
-    private boolean imageLoaded, modifyingDataSet = false;
+    private boolean imageLoaded = false;
 
     public MyAccountFragment() {
     }
-
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState sessionState, Exception e) {
-            onSessionStateChange(session, sessionState, e);
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,17 +81,12 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         });
 
         mSpinner = (ProgressBar) rootView.findViewById(R.id.my_spinner);
-        mLoginButton = (LoginButton) rootView.findViewById(R.id.authButton);
-        mLoginButton.setFragment(this);
-        mLoginButton.setReadPermissions(Arrays.asList("public_profile"));
         mUserAccount = (TextView) rootView.findViewById(R.id.user_account);
         mFacebookPicture = (RoundedImageView) rootView.findViewById(R.id.rounded_profile);
-        mFacebookLoginButton = (LoginButton) rootView.findViewById(R.id.authButton);
         mCreateRideButton = (Button) rootView.findViewById(R.id.create_button);
         mCreateRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modifyingDataSet = true;
                 startActivity(new Intent(getActivity(), CreateRideActivity.class));
             }
         });
@@ -117,58 +98,22 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()) {
-            mFacebookLoginButton.setVisibility(View.GONE);
             mSpinner.setVisibility(View.VISIBLE);
+            makeMeRequest(Session.getActiveSession());
             new FetchRidesJob().execute();
             if (!imageLoaded && mFacebookId != null) {
                 new FetchFacebookImage("http://graph.facebook.com/" + mFacebookId + "/picture?width=150&height=150", mFacebookPicture).execute();
             }
         } else {
-            mFacebookPicture.setVisibility(View.GONE);
-            mUserAccount.setVisibility(View.GONE);
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUiHelper = new UiLifecycleHelper(getActivity(), callback);
-        mUiHelper.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Session session = Session.getActiveSession();
-        // For scenarios where the main activity is launched and user
-        // session is not null, the session state change notification
-        // may not be triggered. Trigger it if it's open/closed.
-        if (modifyingDataSet && session != null && (session.isOpened() || session.isClosed())) {
-            onSessionStateChange(session, session.getState(), null);
-            modifyingDataSet = false;
-        }
-        mUiHelper.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mUiHelper.onPause();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUiHelper.onDestroy();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REAUTH_ACTIVITY_CODE) {
-            mUiHelper.onActivityResult(requestCode, resultCode, data);
-        }
-        mUiHelper.onActivityResult(requestCode, resultCode, data);
     }
 
     private void makeMeRequest(final Session session) {
@@ -192,26 +137,6 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                     }
                 });
         request.executeAsync();
-    }
-
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (session != null && session.isOpened()) {
-            makeMeRequest(session);
-        }
-
-        if (state.isOpened()) {
-            mFacebookLoginButton.setVisibility(View.GONE);
-            mFacebookPicture.setVisibility(View.VISIBLE);
-            mUserAccount.setVisibility(View.VISIBLE);
-            mSpinner.setVisibility(View.VISIBLE);
-            new FetchRidesJob().execute();
-            Log.i(TAG, "Logged in...");
-        } else if (state.isClosed()) {
-            mFacebookPicture.setVisibility(View.GONE);
-            mUserAccount.setVisibility(View.GONE);
-            mFacebookLoginButton.setVisibility(View.VISIBLE);
-            Log.i(TAG, "Logged out...");
-        }
     }
 
     private class FetchRidesJob extends AsyncTask<Void, Void, Void> {

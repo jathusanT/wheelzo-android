@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.Session;
 
 import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.adapter.WheelzoPagerAdapter;
@@ -63,6 +64,11 @@ public class MainActivity extends BaseActivity {
         if (item.getItemId() == R.id.action_search) {
             startActivity(new Intent(this, SearchActivity.class));
             return true;
+        } else if (item.getItemId() == R.id.action_logout) {
+            Session.getActiveSession().closeAndClearTokenInformation();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
