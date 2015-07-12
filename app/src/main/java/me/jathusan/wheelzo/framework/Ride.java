@@ -1,90 +1,114 @@
 package me.jathusan.wheelzo.framework;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 public class Ride {
-    private int id;
-    private int driverId;
-    private String origin;
-    private String destination;
-    private int capacity;
-    private double price;
-    private String start;
-    private String lastUpdated;
-    private ArrayList<String> dropOffs = new ArrayList<String>();
-    private boolean isPersonal;
-    private int color;
+
+    @SerializedName("id")
+    private int mId;
+    @SerializedName("driver_id")
+    private int mDriverId;
+    @SerializedName("origin")
+    private String mOrigin;
+    @SerializedName("destination")
+    private String mDestination;
+    @SerializedName("capacity")
+    private int mCapacity;
+    @SerializedName("price")
+    private double mPrice;
+    @SerializedName("departure_date")
+    private String mDepartureDate;
+    @SerializedName("departure_time")
+    private String mDepartureTime;
+    @SerializedName("last_updated")
+    private String mLastUpdated;
+    @SerializedName("is_personal")
+    private boolean mIsPersonal;
+
+    // Don't serialise these fields with gson
+    private transient int mColor;
+    private transient ArrayList<String> dropOffs = new ArrayList<>();
 
     public int getColor() {
-        return color;
+        return mColor;
     }
 
     public void setColor(int color) {
-        this.color = color;
+        mColor = color;
     }
 
     public String getLastUpdated() {
-        return lastUpdated;
+        return mLastUpdated;
     }
 
     public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
+        mLastUpdated = lastUpdated;
     }
 
     public int getDriverId() {
-        return driverId;
+        return mDriverId;
     }
 
     public void setDriverId(int driverId) {
-        this.driverId = driverId;
+        mDriverId = driverId;
     }
 
     public int getId() {
-        return id;
+        return mId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        mId = id;
     }
 
     public String getOrigin() {
-        return origin;
+        return mOrigin;
     }
 
     public void setOrigin(String origin) {
-        this.origin = origin;
+        mOrigin = origin;
     }
 
     public String getDestination() {
-        return destination;
+        return mDestination;
     }
 
     public void setDestination(String destination) {
-        this.destination = destination;
+        mDestination = destination;
     }
 
     public int getCapacity() {
-        return capacity;
+        return mCapacity;
     }
 
     public void setCapacity(int capacity) {
-        this.capacity = capacity;
+        mCapacity = capacity;
     }
 
     public double getPrice() {
-        return price;
+        return mPrice;
     }
 
     public void setPrice(double price) {
-        this.price = price;
+        mPrice = price;
     }
 
-    public String getStart() {
-        return start;
+    public String getDepartureDate() {
+        return mDepartureDate;
     }
 
-    public void setStart(String start) {
-        this.start = start;
+    public void setDepartureDate(String departureDate) {
+        mDepartureDate = departureDate;
+    }
+
+    public String getDepartureTime() {
+        return mDepartureTime;
+    }
+
+    public void setDepartureTime(String departureTime) {
+        mDepartureTime = departureTime;
     }
 
     public ArrayList<String> getDropOffs() {
@@ -92,7 +116,7 @@ public class Ride {
     }
 
     public void setDropOffs(ArrayList<String> dropOffs) {
-        this.dropOffs = dropOffs;
+        dropOffs = dropOffs;
     }
 
     public void addDropoff(String dropOff) {
@@ -100,10 +124,10 @@ public class Ride {
     }
 
     public boolean isPersonal() {
-        return isPersonal;
+        return mIsPersonal;
     }
 
     public void setPersonal(boolean isPersonal) {
-        this.isPersonal = isPersonal;
+        mIsPersonal = isPersonal;
     }
 }

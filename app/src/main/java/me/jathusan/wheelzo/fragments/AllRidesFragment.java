@@ -14,9 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import me.jathusan.wheelzo.R;
@@ -24,15 +28,16 @@ import me.jathusan.wheelzo.activities.RideInfoActivity;
 import me.jathusan.wheelzo.adapter.RecyclerItemClickListener;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
 import me.jathusan.wheelzo.framework.Ride;
-import me.jathusan.wheelzo.http.WheelzoHttpClient;
-import me.jathusan.wheelzo.util.FormatUtil;
+import me.jathusan.wheelzo.http.WheelzoHttpApi;
 
 public class AllRidesFragment extends android.support.v4.app.Fragment {
+
+    private static final String TAG = "AllRidesFragment";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mRecyclerViewAdapter;
     private RecyclerView.LayoutManager mRecyclerViewLayoutManager;
-    private ArrayList<Ride> mAvailableRides = new ArrayList<Ride>();
+    private ArrayList<Ride> mAvailableRides = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mNoResults;
     private ProgressBar mSpinner;
@@ -108,28 +113,27 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String bufferResponse = WheelzoHttpClient.getBufferResponse("rides", false);
-            if (bufferResponse != null) {
-                try {
-                    JSONArray JSONRides = new JSONArray(bufferResponse);
-                    for (int i = 0; i < JSONRides.length(); i++) {
-                        JSONObject JSONRide = JSONRides.getJSONObject(i);
-                        Ride ride = new Ride();
-                        ride.setId(JSONRide.getInt("id"));
-                        ride.setDriverId(JSONRide.getInt("driver_id"));
-                        ride.setOrigin(JSONRide.getString("origin"));
-                        ride.setDestination(JSONRide.getString("destination"));
-                        ride.setCapacity(JSONRide.getInt("capacity"));
-                        ride.setPrice(JSONRide.getDouble("price"));
-                        ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
-                        ride.setLastUpdated(JSONRide.getString("last_updated"));
-                        ride.setPersonal(JSONRide.getBoolean("is_personal"));
-                        ride.setColor(getResources().getColor(getColorForPrice(ride.getPrice())));
-                        mAvailableRides.add(ride);
-                    }
-                } catch (Exception e) {
-                    Log.e("FetchRidesJob", "Error Creating JSONArray");
+
+            try {
+                Response response = WheelzoHttpApi.getRides();
+
+                if (!response.isSuccessful()) {
+                    return null;
                 }
+
+                JSONArray jsonArray = new JSONArray(response.body().string());
+
+                Gson gson = new Gson();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    Ride ride = gson.fromJson(jsonArray.get(i).toString(), Ride.class);
+                    ride.setColor(getResources().getColor(getColorForPrice(ride.getPrice())));
+                    mAvailableRides.add(ride);
+                }
+
+            } catch (IOException e) {
+                Log.e(TAG, "IOException occured while getting rides", e);
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException occured while parsing get rides request", e);
             }
 
             return null;

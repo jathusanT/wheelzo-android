@@ -37,7 +37,7 @@ import me.jathusan.wheelzo.adapter.RecyclerItemClickListener;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
 import me.jathusan.wheelzo.framework.Ride;
 import me.jathusan.wheelzo.framework.RoundedImageView;
-import me.jathusan.wheelzo.http.WheelzoHttpClient;
+import me.jathusan.wheelzo.http.WheelzoHttpApi;
 import me.jathusan.wheelzo.util.FormatUtil;
 
 public class MyAccountFragment extends android.support.v4.app.Fragment {
@@ -150,7 +150,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String bufferResponse = WheelzoHttpClient.getBufferResponse("rides/me", true);
+            String bufferResponse = WheelzoHttpApi.getBufferResponse("rides/me", true);
             if (bufferResponse != null) {
                 try {
                     JSONArray JSONRides = new JSONArray(bufferResponse);
@@ -163,7 +163,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                         ride.setDestination(JSONRide.getString("destination"));
                         ride.setCapacity(JSONRide.getInt("capacity"));
                         ride.setPrice(JSONRide.getDouble("price"));
-                        ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
+                        ride.setDepartureDate(FormatUtil.formatDate(JSONRide.getString("start")));
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
                         ride.setColor(getResources().getColor(R.color.green_accent_dark));

@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import me.jathusan.wheelzo.R;
-import me.jathusan.wheelzo.http.WheelzoHttpClient;
+import me.jathusan.wheelzo.http.WheelzoHttpApi;
 
 public class CreateRideActivity extends BaseActivity {
 
@@ -60,7 +60,7 @@ public class CreateRideActivity extends BaseActivity {
             JSONObject myRide = createJSONRide("Mobile One", "Mobile Two", "2015-11-20", "00:00:00", 2, 10, new String[]{"Waterloo", "Toronto"});
 
             try {
-                Response response = WheelzoHttpClient.createRideSwag(myRide);
+                Response response = WheelzoHttpApi.createRideSwag(myRide);
                 return response.isSuccessful();
             } catch (IOException e) {
                 return false;

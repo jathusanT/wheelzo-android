@@ -47,7 +47,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
         holder.mOrigin.setText("Departing from " + currentRide.getOrigin());
         holder.mPrice.setText(FormatUtil.formatDollarAmount(currentRide.getPrice()));
         holder.mPrice.setBackgroundColor(currentRide.getColor());
-        holder.mDate.setText(currentRide.getStart());
+        holder.mDate.setText(currentRide.getDepartureDate());
     }
     @Override
     public int getItemCount() {

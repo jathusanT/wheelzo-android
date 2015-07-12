@@ -19,12 +19,32 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class WheelzoHttpClient {
+public class WheelzoHttpApi {
 
-    private static final String API_BASE_URL = "http://www.staging.wheelzo.com/api/v2/";
-
-    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final String TAG = "WheelzoHttpApi";
+    private static final String API_BASE_URL = "http://www.staging.wheelzo.com/api/v2";
     private static final String HEADER_FB_TOKEN = "Fb-Wheelzo-Token";
+    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
+
+    private static final OkHttpClient mOkHttpClient = new OkHttpClient();
+
+    private enum Endpoint {
+        RIDES;
+
+        public String getUrlEndpoint() {
+            return "/" + this.name().toLowerCase();
+        }
+    }
+
+    public static Response getRides() throws IOException {
+        Request request = new Request.Builder()
+                .url(API_BASE_URL + Endpoint.RIDES.getUrlEndpoint())
+                .addHeader("Content-type", "application/json")
+                .get()
+                .build();
+
+        return mOkHttpClient.newCall(request).execute();
+    }
 
     public static String getBufferResponse(String url, boolean requiresHeader) {
 
@@ -41,7 +61,7 @@ public class WheelzoHttpClient {
             if (requiresHeader) {
                 Session session = Session.getActiveSession();
                 if (session == null) {
-                    Log.e("WheelzoHttpClient", "Requested Me Data, But Session Was Null!");
+                    Log.e("WheelzoHttpApi", "Requested Me Data, But Session Was Null!");
                     return null;
                 }
                 request.setHeader("FB_WHEELZO_TOKEN", session.getAccessToken());
@@ -58,26 +78,22 @@ public class WheelzoHttpClient {
             return builder.toString();
 
         } catch (Exception e) {
-            Log.e("WheelzoHttpClient", "Exception while executing http request", e);
+            Log.e("WheelzoHttpApi", "Exception while executing http request", e);
         }
 
         return null;
     }
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
     public static Response createRideSwag(JSONObject ride) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, ride.toString());
 
         Request request = new Request.Builder()
-                .url(API_BASE_URL + "rides")
+                .url(API_BASE_URL + Endpoint.RIDES.getUrlEndpoint())
                 .addHeader("Content-type", "application/json")
                 .addHeader(HEADER_FB_TOKEN, Session.getActiveSession().getAccessToken())
                 .post(requestBody)
                 .build();
 
-        return client.newCall(request).execute();
+        return mOkHttpClient.newCall(request).execute();
     }
 }
