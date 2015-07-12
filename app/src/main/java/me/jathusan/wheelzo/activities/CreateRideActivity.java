@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Response;
 
@@ -64,16 +63,6 @@ public class CreateRideActivity extends BaseActivity {
                 return response.isSuccessful();
             } catch (IOException e) {
                 return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            super.onPostExecute(success);
-            Log.d("Jathusan", "DONE!");
-
-            if (success) {
-                Toast.makeText(CreateRideActivity.this, "OK", Toast.LENGTH_SHORT).show();
             }
         }
     }

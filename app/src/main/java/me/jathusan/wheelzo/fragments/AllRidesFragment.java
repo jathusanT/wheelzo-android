@@ -33,6 +33,7 @@ import me.jathusan.wheelzo.http.WheelzoHttpApi;
 public class AllRidesFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "AllRidesFragment";
+    private static final String RIDE_PARCELABLE_KEY = "me.jathusan.wheelzo.Ride";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mRecyclerViewAdapter;
@@ -66,7 +67,9 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(getActivity(), RideInfoActivity.class));
+                Intent rideInfo = new Intent(getActivity(), RideInfoActivity.class);
+                rideInfo.putExtra(RIDE_PARCELABLE_KEY, mAvailableRides.get(position));
+                startActivity(rideInfo);
             }
         }));
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
