@@ -2,6 +2,7 @@ package me.jathusan.wheelzo.activities;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -18,11 +19,13 @@ import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.adapter.WheelzoPagerAdapter;
 import me.jathusan.wheelzo.fragments.AllRidesFragment;
 import me.jathusan.wheelzo.fragments.MyAccountFragment;
+import me.jathusan.wheelzo.views.SlidingTabLayout;
 
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
     private ViewPager mViewPager;
+    private SlidingTabLayout mSlidingTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +37,35 @@ public class MainActivity extends BaseActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         setupViewPager();
+
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.white));
+        mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.default_purple));
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setViewPager(mViewPager);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mSlidingTabLayout.setElevation(getResources().getDimension(R.dimen.actionbar_elevation));
+        }
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) { }
+        });
         initializeActionBar();
     }
 
     private void setupViewPager() {
         mViewPager.setOffscreenPageLimit(2);
         WheelzoPagerAdapter adapter = new WheelzoPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new AllRidesFragment());
-        adapter.addFragment(new MyAccountFragment());
+        adapter.addFragment(new AllRidesFragment(), "All Rides");
+        adapter.addFragment(new MyAccountFragment(), "My Account");
         mViewPager.setAdapter(adapter);
         mViewPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -85,36 +109,9 @@ public class MainActivity extends BaseActivity {
         if (actionBar == null) {
             Log.e(TAG, "Failed to initialize actionbar -- actionbar was null");
         }
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        addTabsToActionBar(actionBar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            actionBar.setElevation(0);
+        }
     }
 
-
-    private void addTabsToActionBar(ActionBar actionBar) {
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            @Override
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-            }
-
-            @Override
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-            }
-        };
-        actionBar.addTab(
-                actionBar.newTab()
-                        .setText("All Rides")
-                        .setTabListener(tabListener));
-        actionBar.addTab(
-                actionBar.newTab()
-                        .setText("My Account")
-                        .setTabListener(tabListener));
-        actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.default_purple)));
-    }
 }

@@ -13,6 +13,7 @@ public class WheelzoPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final String TAG = "WheelzoPagerAdapter";
     private ArrayList<Fragment> mFragmentList = new ArrayList<Fragment>();
+    private ArrayList<String> mFragmentTitles = new ArrayList<String>();
 
     public WheelzoPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,8 +24,9 @@ public class WheelzoPagerAdapter extends FragmentStatePagerAdapter {
         return mFragmentList.get(position);
     }
 
-    public void addFragment(Fragment fragment) {
+    public void addFragment(Fragment fragment, String title) {
         mFragmentList.add(fragment);
+        mFragmentTitles.add(title);
     }
 
     @Override
@@ -32,4 +34,8 @@ public class WheelzoPagerAdapter extends FragmentStatePagerAdapter {
         return mFragmentList.size();
     }
 
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mFragmentTitles.get(position);
+    }
 }

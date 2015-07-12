@@ -128,6 +128,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
                         ride.setPrice(JSONRide.getDouble("price"));
                         ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
+                        ride.setDriverName(JSONRide.getString("driver_name"));
                         ride.setDriverFacebookid(JSONRide.getString("driver_facebook_id"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
                         ride.setColor(getResources().getColor(getColorForPrice(ride.getPrice())));

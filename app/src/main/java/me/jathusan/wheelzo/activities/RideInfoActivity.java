@@ -23,7 +23,7 @@ public class RideInfoActivity extends BaseActivity {
     private static final String TAG = "RideInfoActivity";
 
     private static final String RIDE_PARCELABLE_KEY = "me.jathusan.wheelzo.Ride";
-    private TextView mOrigin, mDestination, mDate, mTime, mCapacity, mPrice;
+    private TextView mOrigin, mDestination, mDate, mTime, mCapacity, mPrice, mDriverName;
     private Ride mRide;
     private RoundedImageView mDriverPicture;
 
@@ -51,6 +51,7 @@ public class RideInfoActivity extends BaseActivity {
         }
 
         mDriverPicture = (RoundedImageView) findViewById(R.id.driver_picture);
+        mDriverName = (TextView) findViewById(R.id.driver_name);
         mOrigin = (TextView) findViewById(R.id.origin_text);
         mDestination = (TextView) findViewById(R.id.dest_text);
         mDate = (TextView) findViewById(R.id.date_text);
@@ -65,7 +66,7 @@ public class RideInfoActivity extends BaseActivity {
     }
 
     private void setupInterface() {
-        // TODO
+        mDriverName.setText(mRide.getDriverName());
     }
 
     @Override

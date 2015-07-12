@@ -10,6 +10,7 @@ public class Ride implements Parcelable {
     private int id;
     private int driverId;
     private String driverFacebookid;
+    private String driverName;
     private String origin;
     private String destination;
     private int capacity;
@@ -122,10 +123,19 @@ public class Ride implements Parcelable {
         this.driverFacebookid = driverFacebookid;
     }
 
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
     protected Ride(Parcel in) {
         id = in.readInt();
         driverId = in.readInt();
         driverFacebookid = in.readString();
+        driverName = in.readString();
         origin = in.readString();
         destination = in.readString();
         capacity = in.readInt();
@@ -152,6 +162,7 @@ public class Ride implements Parcelable {
         dest.writeInt(id);
         dest.writeInt(driverId);
         dest.writeString(driverFacebookid);
+        dest.writeString(driverName);
         dest.writeString(origin);
         dest.writeString(destination);
         dest.writeInt(capacity);
