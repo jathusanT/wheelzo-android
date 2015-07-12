@@ -60,7 +60,6 @@ public class CreateRideActivity extends BaseActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.d("Jathusan", "DONE!");
         }
     }
 

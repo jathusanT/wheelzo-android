@@ -1,8 +1,12 @@
 package me.jathusan.wheelzo.framework;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
-public class Ride {
+public class Ride implements Parcelable {
+
     private int id;
     private int driverId;
     private String origin;
@@ -14,6 +18,8 @@ public class Ride {
     private ArrayList<String> dropOffs = new ArrayList<String>();
     private boolean isPersonal;
     private int color;
+
+    public Ride() {}
 
     public int getColor() {
         return color;
@@ -106,4 +112,61 @@ public class Ride {
     public void setPersonal(boolean isPersonal) {
         this.isPersonal = isPersonal;
     }
+
+    protected Ride(Parcel in) {
+        id = in.readInt();
+        driverId = in.readInt();
+        origin = in.readString();
+        destination = in.readString();
+        capacity = in.readInt();
+        price = in.readDouble();
+        start = in.readString();
+        lastUpdated = in.readString();
+        if (in.readByte() == 0x01) {
+            dropOffs = new ArrayList<String>();
+            in.readList(dropOffs, String.class.getClassLoader());
+        } else {
+            dropOffs = null;
+        }
+        isPersonal = in.readByte() != 0x00;
+        color = in.readInt();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(driverId);
+        dest.writeString(origin);
+        dest.writeString(destination);
+        dest.writeInt(capacity);
+        dest.writeDouble(price);
+        dest.writeString(start);
+        dest.writeString(lastUpdated);
+        if (dropOffs == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(dropOffs);
+        }
+        dest.writeByte((byte) (isPersonal ? 0x01 : 0x00));
+        dest.writeInt(color);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Ride> CREATOR = new Parcelable.Creator<Ride>() {
+        @Override
+        public Ride createFromParcel(Parcel in) {
+            return new Ride(in);
+        }
+
+        @Override
+        public Ride[] newArray(int size) {
+            return new Ride[size];
+        }
+    };
 }
