@@ -144,6 +144,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mSpinner.setVisibility(View.VISIBLE);
             mAvailableRides.clear();
             mRecyclerViewAdapter.notifyDataSetChanged();
         }
