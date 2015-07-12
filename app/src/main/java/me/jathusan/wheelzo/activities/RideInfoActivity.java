@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.framework.Ride;
+import me.jathusan.wheelzo.framework.RoundedImageView;
+import me.jathusan.wheelzo.util.ImageUtil;
 
 public class RideInfoActivity extends BaseActivity {
 
@@ -20,6 +22,7 @@ public class RideInfoActivity extends BaseActivity {
     private static final String RIDE_PARCELABLE_KEY = "me.jathusan.wheelzo.Ride";
     private TextView mOrigin, mDestination, mDate, mTime, mCapacity, mPrice;
     private Ride mRide;
+    private RoundedImageView mDriverPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class RideInfoActivity extends BaseActivity {
             finishActivity();
         }
 
+        mDriverPicture = (RoundedImageView) findViewById(R.id.driver_picture);
         mOrigin = (TextView) findViewById(R.id.origin_text);
         mDestination = (TextView) findViewById(R.id.dest_text);
         mDate = (TextView) findViewById(R.id.date_text);
@@ -53,6 +57,12 @@ public class RideInfoActivity extends BaseActivity {
 
         // Get the back button to show up in the actionbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ImageUtil.loadFacebookImageIntoView(""+mRide.getDriverFacebookid(), mDriverPicture);
+        setupInterface();
+    }
+
+    private void setupInterface() {
+        // TODO
     }
 
     @Override

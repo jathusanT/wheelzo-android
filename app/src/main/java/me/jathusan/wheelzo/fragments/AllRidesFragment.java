@@ -113,6 +113,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             String bufferResponse = WheelzoHttpClient.getBufferResponse("rides", false);
+            Log.d("Test", bufferResponse);
             if (bufferResponse != null) {
                 try {
                     JSONArray JSONRides = new JSONArray(bufferResponse);
@@ -127,6 +128,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
                         ride.setPrice(JSONRide.getDouble("price"));
                         ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
+                        ride.setDriverFacebookid(JSONRide.getString("driver_facebook_id"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
                         ride.setColor(getResources().getColor(getColorForPrice(ride.getPrice())));
                         mAvailableRides.add(ride);

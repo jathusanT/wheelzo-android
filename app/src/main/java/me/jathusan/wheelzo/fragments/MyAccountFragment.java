@@ -1,8 +1,6 @@
 package me.jathusan.wheelzo.fragments;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,9 +22,6 @@ import com.facebook.model.GraphUser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import me.jathusan.wheelzo.R;
@@ -39,6 +34,7 @@ import me.jathusan.wheelzo.framework.Ride;
 import me.jathusan.wheelzo.framework.RoundedImageView;
 import me.jathusan.wheelzo.http.WheelzoHttpClient;
 import me.jathusan.wheelzo.util.FormatUtil;
+import me.jathusan.wheelzo.util.ImageUtil;
 
 public class MyAccountFragment extends android.support.v4.app.Fragment {
 
@@ -105,8 +101,8 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
             mSpinner.setVisibility(View.VISIBLE);
             makeMeRequest(Session.getActiveSession());
             new FetchRidesJob().execute();
-            if (!imageLoaded && mFacebookId != null) {
-                new FetchFacebookImage("http://graph.facebook.com/" + mFacebookId + "/picture?width=150&height=150", mFacebookPicture).execute();
+            if (mFacebookId != null) {
+                ImageUtil.loadFacebookImageIntoView(mFacebookId, mFacebookPicture);
             }
         } else {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -132,7 +128,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                                 mFacebookId = user.getId();
 
                                 Log.i(TAG, "Facebook ID = " + mFacebookId);
-                                new FetchFacebookImage("https://graph.facebook.com/" + mFacebookId + "/picture?width=200&height=200", mFacebookPicture).execute();
+                                ImageUtil.loadFacebookImageIntoView(mFacebookId, mFacebookPicture);
                             }
                         }
                         if (response.getError() != null) {
@@ -170,6 +166,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                         ride.setPrice(JSONRide.getDouble("price"));
                         ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
                         ride.setLastUpdated(JSONRide.getString("last_updated"));
+                        ride.setDriverFacebookid(JSONRide.getString("driver_facebook_id"));
                         ride.setPersonal(JSONRide.getBoolean("is_personal"));
                         ride.setColor(getResources().getColor(R.color.green_accent_dark));
                         // TODO: Dropoffs
@@ -191,43 +188,6 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                 // Update UI For No Rides
             } else {
                 mRecyclerViewAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    private class FetchFacebookImage extends AsyncTask<Void, Void, Bitmap> {
-
-        private String url;
-        private RoundedImageView imageView;
-
-        private FetchFacebookImage(String url, RoundedImageView imageView) {
-            this.url = url;
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            try {
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                return myBitmap;
-            } catch (Exception e) {
-                Log.e("Facebook Image Load", "Exception while downloading Faceobok image", e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            if (bitmap != null) {
-                imageView.setImageBitmap(bitmap);
-                imageLoaded = true;
             }
         }
     }
