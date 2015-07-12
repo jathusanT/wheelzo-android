@@ -102,7 +102,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
             makeMeRequest(Session.getActiveSession());
             new FetchRidesJob().execute();
             if (mFacebookId != null) {
-                ImageUtil.loadFacebookImageIntoView(mFacebookId, mFacebookPicture);
+                ImageUtil.loadFacebookImageIntoView(getActivity(), mFacebookId, mFacebookPicture);
             }
         } else {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -128,7 +128,7 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
                                 mFacebookId = user.getId();
 
                                 Log.i(TAG, "Facebook ID = " + mFacebookId);
-                                ImageUtil.loadFacebookImageIntoView(mFacebookId, mFacebookPicture);
+                                ImageUtil.loadFacebookImageIntoView(getActivity(), mFacebookId, mFacebookPicture);
                             }
                         }
                         if (response.getError() != null) {

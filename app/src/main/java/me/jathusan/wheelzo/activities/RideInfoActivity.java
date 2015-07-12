@@ -1,12 +1,15 @@
 package me.jathusan.wheelzo.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +60,7 @@ public class RideInfoActivity extends BaseActivity {
 
         // Get the back button to show up in the actionbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ImageUtil.loadFacebookImageIntoView(""+mRide.getDriverFacebookid(), mDriverPicture);
+        ImageUtil.loadFacebookImageIntoView(this, mRide.getDriverFacebookid(), mDriverPicture);
         setupInterface();
     }
 
@@ -75,4 +78,5 @@ public class RideInfoActivity extends BaseActivity {
         Toast.makeText(this, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
         finish();
     }
+
 }

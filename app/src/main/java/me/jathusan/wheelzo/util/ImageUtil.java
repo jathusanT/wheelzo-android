@@ -1,9 +1,13 @@
 package me.jathusan.wheelzo.util;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -16,24 +20,26 @@ import me.jathusan.wheelzo.framework.RoundedImageView;
  */
 public class ImageUtil {
 
-    public static void loadFacebookImageIntoView(String facebookId, RoundedImageView imageView) {
-        new FetchFacebookImage("https://graph.facebook.com/" + facebookId + "/picture?width=200&height=200", imageView).execute();
+    public static void loadFacebookImageIntoView(Context context, String facebookId, RoundedImageView imageView) {
+        new FetchFacebookImage(context, facebookId, imageView).execute();
     }
 
     private static class FetchFacebookImage extends AsyncTask<Void, Void, Bitmap> {
 
-        private String url;
-        private RoundedImageView imageView;
+        private Context mContext;
+        private String mFacebookId;
+        private RoundedImageView mImageView;
 
-        private FetchFacebookImage(String url, RoundedImageView imageView) {
-            this.url = url;
-            this.imageView = imageView;
+        private FetchFacebookImage(Context context, String facebookId, RoundedImageView imageView) {
+            mContext = context;
+            mFacebookId = facebookId;
+            mImageView = imageView;
         }
 
         @Override
         protected Bitmap doInBackground(Void... params) {
             try {
-                URL urlConnection = new URL(url);
+                URL urlConnection = new URL("https://graph.facebook.com/" + mFacebookId + "/picture?width=200&height=200");
                 HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
@@ -51,8 +57,27 @@ public class ImageUtil {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             if (bitmap != null) {
-                imageView.setImageBitmap(bitmap);
+                mImageView.setImageBitmap(bitmap);
+                mImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent fbIntent = getOpenFacebookIntent(mContext, mFacebookId);
+                        mContext.startActivity(fbIntent);
+                    }
+                });
             }
+        }
+    }
+
+    public static Intent getOpenFacebookIntent(Context context, String facebookId) {
+        try {
+            context.getPackageManager()
+                    .getPackageInfo("com.facebook.katana", 0); //Checks if FB is even installed.
+            return new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("fb://profile/" + facebookId)); //Trys to make intent with FB's URI
+        } catch (Exception e) {
+            return new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.facebook.com/sentiapps")); //catches and opens a url to the desired page
         }
     }
 
