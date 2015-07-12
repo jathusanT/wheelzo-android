@@ -83,8 +83,10 @@ public class LoginFragment extends Fragment {
         }
 
         if (state.isOpened()) {
+            mLoginButton.setVisibility(View.INVISIBLE);
             Log.i(TAG, "Logged in...");
         } else if (state.isClosed()) {
+            mLoginButton.setVisibility(View.VISIBLE);
             Log.i(TAG, "Logged out...");
         }
     }
