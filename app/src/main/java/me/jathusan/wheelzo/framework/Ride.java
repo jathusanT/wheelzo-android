@@ -22,6 +22,8 @@ public class Ride {
     private String mDepartureDate;
     @SerializedName("departure_time")
     private String mDepartureTime;
+    @SerializedName("start")
+    private String mStart;
     @SerializedName("last_updated")
     private String mLastUpdated;
     @SerializedName("is_personal")
@@ -93,6 +95,14 @@ public class Ride {
 
     public void setPrice(double price) {
         mPrice = price;
+    }
+
+    public String getStart() {
+        return mStart;
+    }
+
+    public void setStart(String start) {
+        mStart = start;
     }
 
     public String getDepartureDate() {
