@@ -4,9 +4,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 import me.jathusan.wheelzo.R;
 import me.jathusan.wheelzo.http.WheelzoHttpClient;
@@ -48,19 +53,28 @@ public class CreateRideActivity extends BaseActivity {
         return object;
     }
 
-    private class CreateRideJob extends AsyncTask<Void, Void, Void> {
+    private class CreateRideJob extends AsyncTask<Void, Void, Boolean> {
 
         @Override
-        protected Void doInBackground(Void... params) {
-            JSONObject myRide = createJSONRide("Mobile One", "Mobile Two", "2014-11-20", "00:00:00", 2, 10, new String[]{"Waterloo", "Toronto"});
-            WheelzoHttpClient.createRide(myRide);
-            return null;
+        protected Boolean doInBackground(Void... params) {
+            JSONObject myRide = createJSONRide("Mobile One", "Mobile Two", "2015-11-20", "00:00:00", 2, 10, new String[]{"Waterloo", "Toronto"});
+
+            try {
+                Response response = WheelzoHttpClient.createRideSwag(myRide);
+                return response.isSuccessful();
+            } catch (IOException e) {
+                return false;
+            }
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
             Log.d("Jathusan", "DONE!");
+
+            if (success) {
+                Toast.makeText(CreateRideActivity.this, "OK", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
