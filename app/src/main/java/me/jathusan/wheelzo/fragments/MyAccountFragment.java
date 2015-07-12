@@ -18,10 +18,12 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import me.jathusan.wheelzo.R;
@@ -32,8 +34,7 @@ import me.jathusan.wheelzo.adapter.RecyclerItemClickListener;
 import me.jathusan.wheelzo.adapter.RidesAdapter;
 import me.jathusan.wheelzo.framework.Ride;
 import me.jathusan.wheelzo.framework.RoundedImageView;
-import me.jathusan.wheelzo.http.WheelzoHttpClient;
-import me.jathusan.wheelzo.util.FormatUtil;
+import me.jathusan.wheelzo.http.WheelzoHttpApi;
 import me.jathusan.wheelzo.util.ImageUtil;
 
 public class MyAccountFragment extends android.support.v4.app.Fragment {
@@ -151,31 +152,26 @@ public class MyAccountFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String bufferResponse = WheelzoHttpClient.getBufferResponse("rides/me", true);
-            if (bufferResponse != null) {
-                try {
-                    JSONArray JSONRides = new JSONArray(bufferResponse);
-                    for (int i = 0; i < JSONRides.length(); i++) {
-                        JSONObject JSONRide = JSONRides.getJSONObject(i);
-                        Ride ride = new Ride();
-                        ride.setId(JSONRide.getInt("id"));
-                        ride.setDriverId(JSONRide.getInt("driver_id"));
-                        ride.setOrigin(JSONRide.getString("origin"));
-                        ride.setDestination(JSONRide.getString("destination"));
-                        ride.setCapacity(JSONRide.getInt("capacity"));
-                        ride.setPrice(JSONRide.getDouble("price"));
-                        ride.setStart(FormatUtil.formatDate(JSONRide.getString("start")));
-                        ride.setLastUpdated(JSONRide.getString("last_updated"));
-                        ride.setDriverName(JSONRide.getString("driver_name"));
-                        ride.setDriverFacebookid(JSONRide.getString("driver_facebook_id"));
-                        ride.setPersonal(JSONRide.getBoolean("is_personal"));
-                        ride.setColor(getResources().getColor(R.color.green_accent_dark));
-                        // TODO: Dropoffs
-                        mAvailableRides.add(ride);
-                    }
-                } catch (Exception e) {
-                    Log.e("FetchRidesJob", "Error Creating JSONArray");
+            try {
+                com.squareup.okhttp.Response response = WheelzoHttpApi.getMyRides();
+
+                if (!response.isSuccessful()) {
+                    return null;
                 }
+
+                JSONArray jsonArray = new JSONArray(response.body().string());
+
+                Gson gson = new Gson();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    Ride ride = gson.fromJson(jsonArray.get(i).toString(), Ride.class);
+                    ride.setColor(getResources().getColor(R.color.green_accent_dark));
+                    mAvailableRides.add(ride);
+                }
+
+            } catch (IOException e) {
+                Log.e(TAG, "IOException occurred while getting myRides", e);
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException occurred while getting myRides", e);
             }
 
             return null;

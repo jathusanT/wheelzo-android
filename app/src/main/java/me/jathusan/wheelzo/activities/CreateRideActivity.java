@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.squareup.okhttp.Response;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import me.jathusan.wheelzo.R;
-import me.jathusan.wheelzo.http.WheelzoHttpClient;
+import me.jathusan.wheelzo.http.WheelzoHttpApi;
 
 public class CreateRideActivity extends BaseActivity {
 
@@ -48,18 +52,18 @@ public class CreateRideActivity extends BaseActivity {
         return object;
     }
 
-    private class CreateRideJob extends AsyncTask<Void, Void, Void> {
+    private class CreateRideJob extends AsyncTask<Void, Void, Boolean> {
 
         @Override
-        protected Void doInBackground(Void... params) {
-            JSONObject myRide = createJSONRide("Mobile One", "Mobile Two", "2014-11-20", "00:00:00", 2, 10, new String[]{"Waterloo", "Toronto"});
-            WheelzoHttpClient.createRide(myRide);
-            return null;
-        }
+        protected Boolean doInBackground(Void... params) {
+            JSONObject myRide = createJSONRide("Mobile One", "Mobile Two", "2015-11-20", "00:00:00", 2, 10, new String[]{"Waterloo", "Toronto"});
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+            try {
+                Response response = WheelzoHttpApi.createRideSwag(myRide);
+                return response.isSuccessful();
+            } catch (IOException e) {
+                return false;
+            }
         }
     }
 
