@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:background="@color/default_purple"
     android:gravity="center"
     android:orientation="vertical">
@@ -19,4 +19,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:linksClickable="true"
+        android:padding="20dp"
+        android:text="@string/login_footer"
+        android:textColor="@color/white"
+        android:textSize="10dp" />
+
 </LinearLayout>

@@ -7,6 +7,7 @@
     <color name="navbar_purple">#ff0c0d1b</color>
     <color name="yellow_accent">#fbc02d</color>
     <color name="yellow_accent_dark">#ffdca827</color>
+    <color name="yellow_ripple">#ae851f</color>
     <color name="green_accent">#ff00e82d</color>
     <color name="green_accent_dark">#ff00c225</color>
     <color name="blue_accent">#03a9f4</color>
@@ -18,6 +19,10 @@
     <color name="light_gray">#f0ecf1</color>
     <color name="dark_gray">#ff222222</color>
     <color name="gray">#ff313131</color>
+    <color name="bright_blue">#03a9f4</color>
+    <color name="bright_blue_dark">#0282bc</color>
+    <color name="red">#e51929</color>
+    <color name="dark_red">#b21320</color>
 
     <!-- Price Colors -->
     <color name="price0_5">#ff7957dc</color>

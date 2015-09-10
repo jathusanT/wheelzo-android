@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center">
@@ -11,7 +12,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <me.jathusan.wheelzo.framework.RoundedImageView
+        <me.jathusan.android.framework.RoundedImageView
             android:id="@+id/rounded_profile"
             android:layout_width="75dp"
             android:layout_height="75dp"
@@ -49,18 +50,6 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/create_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="CREATE RIDE" />
-
-            <Button
-                android:id="@+id/rep_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0.0 REP" />
         </LinearLayout>
 
     </LinearLayout>
@@ -81,5 +70,18 @@
         android:layout_below="@+id/user_info"
         android:background="@color/light_gray"
         android:scrollbars="vertical" />
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_add"
+        android:layout_margin="20dp"
+        fab:fab_colorNormal="@color/yellow_accent"
+        fab:fab_colorPressed="@color/yellow_accent_dark"
+        fab:fab_colorRipple="@color/yellow_ripple" />
 
 </RelativeLayout>
