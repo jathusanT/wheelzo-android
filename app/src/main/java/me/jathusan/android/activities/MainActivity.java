@@ -49,6 +49,7 @@ public class MainActivity extends BaseActivity {
         setupViewPager();
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setCustomTabView(R.layout.custom_tab_layout, 0);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.white));
         mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.default_purple));
         mSlidingTabLayout.setDistributeEvenly(true);
@@ -74,10 +75,10 @@ public class MainActivity extends BaseActivity {
 
     private void setupViewPager() {
         mViewPager.setOffscreenPageLimit(2);
-        WheelzoPagerAdapter adapter = new WheelzoPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new AllRidesFragment(), getString(R.string.all_rides_tab));
-        adapter.addFragment(new MyRidesFragment(), getString(R.string.my_rides_tab));
-        adapter.addFragment(new MyAccountFragment(), getString(R.string.my_account_tab));
+        WheelzoPagerAdapter adapter = new WheelzoPagerAdapter(this, getSupportFragmentManager());
+        adapter.addFragment(new AllRidesFragment(), getString(R.string.all_rides_tab), R.drawable.ic_rides);
+        adapter.addFragment(new MyRidesFragment(), getString(R.string.my_rides_tab), R.drawable.ic_my_rides);
+        adapter.addFragment(new MyAccountFragment(), getString(R.string.my_account_tab), R.drawable.ic_account);
         mViewPager.setAdapter(adapter);
         mViewPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
