@@ -1,4 +1,4 @@
-package me.jathusan.android.framework;
+package me.jathusan.android.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;

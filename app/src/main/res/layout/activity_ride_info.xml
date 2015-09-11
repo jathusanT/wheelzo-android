@@ -15,7 +15,7 @@
         android:paddingBottom="20dp"
         android:paddingTop="35dp">
 
-        <me.jathusan.android.framework.RoundedImageView
+        <me.jathusan.android.model.RoundedImageView
             android:id="@+id/driver_picture"
             android:layout_width="100dp"
             android:layout_height="100dp"

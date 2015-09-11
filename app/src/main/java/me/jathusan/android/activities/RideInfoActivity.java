@@ -8,11 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import me.jathusan.android.R;
-import me.jathusan.android.framework.Ride;
-import me.jathusan.android.framework.RoundedImageView;
+import me.jathusan.android.model.Ride;
+import me.jathusan.android.model.RoundedImageView;
 import me.jathusan.android.util.ImageUtil;
 
 public class RideInfoActivity extends BaseActivity {
@@ -23,7 +25,12 @@ public class RideInfoActivity extends BaseActivity {
     public static final String RIDE_PARCELABLE_KEY = "me.jathusan.wheelzo.Ride";
     public static final String MY_RIDE_KEY = "wheelzo_my_ride_key";
 
-    private TextView mOrigin, mDestination, mDate, mCapacity, mPrice, mDriverName;
+    private TextView mOrigin;
+    private TextView mDestination;
+    private TextView mDate;
+    private TextView mCapacity;
+    private TextView mPrice;
+    private TextView mDriverName;
     private Ride mRide;
     private RoundedImageView mDriverPicture;
     private Button mCommentsButton;
@@ -38,26 +45,28 @@ public class RideInfoActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent == null) {
             Log.e(TAG, "Failed to create RideInfoActivity -- intent was null");
-            finishActivity();
+            finishActivityWithError();
         }
 
         Bundle bundle = intent.getExtras();
         if (bundle == null) {
             Log.e(TAG, "Failed to create RideInfoActivity -- bundle was null");
-            finishActivity();
+            finishActivityWithError();
         }
 
         mRide = bundle.getParcelable(RIDE_PARCELABLE_KEY);
         if (mRide == null) {
             Log.e(TAG, "Failed to create RideInfoActivity -- parcelable was null");
-            finishActivity();
+            finishActivityWithError();
         }
 
         mCommentsButton = (Button) findViewById(R.id.view_comments_button);
         mCommentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // start comments activity
+                Intent commentsActivity = new Intent(RideInfoActivity.this, CommentActivity.class);
+                commentsActivity.putExtra(CommentActivity.RIDE_ID_KEY, mRide.getId());
+                startActivity(commentsActivity);
             }
         });
 
@@ -77,7 +86,7 @@ public class RideInfoActivity extends BaseActivity {
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: delete ride
+                //TODO: deleteRide
                 finish();
             }
         });
@@ -107,22 +116,27 @@ public class RideInfoActivity extends BaseActivity {
             getSupportActionBar().setElevation(0);
         }
         mDriverName.setText(mRide.getDriverName());
-        mOrigin.setText(mRide.getOrigin());
-        mDestination.setText(mRide.getDestination());
-        mDate.setText(mRide.getStart());
-        //mCapacity.setText(mRide.getCapacity());
-        mPrice.setText("$" + mRide.getPrice());
+        mOrigin.setText("Origin: " + mRide.getOrigin());
+        mDestination.setText("Destination: " + mRide.getDestination());
+        mDate.setText(convertDate(mRide.getStart()));
+        mCapacity.setText(Integer.toString(mRide.getCapacity()) + " Seat Capacity");
+        mPrice.setText(mRide.getPrice() + ".00 per seat");
+    }
+
+    private String convertDate(String start) {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start);
+            return new SimpleDateFormat("EEE, MMM d yyyy, hh:mm aaa").format(date);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to parse date");
+            return start;
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return super.onOptionsItemSelected(item);
-    }
-
-    private void finishActivity() {
-        Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
-        finish();
     }
 
 }

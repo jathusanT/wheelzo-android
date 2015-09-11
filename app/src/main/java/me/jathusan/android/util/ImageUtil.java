@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import me.jathusan.android.framework.RoundedImageView;
+import me.jathusan.android.model.RoundedImageView;
 
 /**
  * Created by jathusan on 7/11/15.

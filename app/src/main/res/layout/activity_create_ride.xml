@@ -56,6 +56,7 @@
                 android:id="@+id/date_edit_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:editable="false"
                 android:hint="Departure Date" />
         </LinearLayout>
 
@@ -72,6 +73,7 @@
                 android:id="@+id/time_edit_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:editable="false"
                 android:hint="Departure Time" />
         </LinearLayout>
 
@@ -106,8 +108,19 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="Price"
-                android:numeric="integer"/>
+                android:numeric="integer" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/create_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/purple_button"
+            android:text="@string/create_ride"
+            android:textColor="@color/white" />
+
     </LinearLayout>
+
 </ScrollView>

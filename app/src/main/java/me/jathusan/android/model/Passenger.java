@@ -1,4 +1,4 @@
-package me.jathusan.android.framework;
+package me.jathusan.android.model;
 
 public class Passenger {
     private int id;

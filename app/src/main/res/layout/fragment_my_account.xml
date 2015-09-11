@@ -1,18 +1,21 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center">
+    android:background="@color/light_gray"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/user_info"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/light_gray"
+        android:paddingBottom="25dp"
         android:gravity="center"
         android:orientation="vertical">
 
-        <me.jathusan.android.framework.RoundedImageView
+        <me.jathusan.android.model.RoundedImageView
             android:id="@+id/rounded_profile"
             android:layout_width="75dp"
             android:layout_height="75dp"
@@ -54,34 +57,25 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/my_spinner"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/contact_button"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_info"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:paddingTop="50dp" />
+        android:textColor="@color/white"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/contact_us"
+        android:background="@drawable/purple_button"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_rides_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/user_info"
-        android:background="@color/light_gray"
-        android:scrollbars="vertical" />
-
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_add"
-        android:layout_margin="20dp"
-        fab:fab_colorNormal="@color/yellow_accent"
-        fab:fab_colorPressed="@color/yellow_accent_dark"
-        fab:fab_colorRipple="@color/yellow_ripple" />
+        android:textColor="@color/white"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:text="@string/logout"
+        android:background="@drawable/red_button"/>
 
-</RelativeLayout>
+</LinearLayout>

@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import me.jathusan.android.R;
-import me.jathusan.android.framework.Ride;
+import me.jathusan.android.model.Ride;
 import me.jathusan.android.util.FormatUtil;
 
 public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> {
