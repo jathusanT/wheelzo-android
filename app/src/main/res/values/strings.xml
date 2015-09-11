@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Wheelzo</string>
+    <string name="welcome_title">Welcome To</string>
     <string name="facebook_app_id">282192178572651</string>
     <string name="wheelzo_email">info@wheelzo.com</string>
     <string name="privacy_policy_url">https://wheelzo.com/privacy</string>
@@ -25,7 +26,7 @@
     <string name="no_rides">You have not created\nany rides yet!</string>
     <string name="something_went_wrong">Something went wrong. Please try again.</string>
     <string name="create_ride_missing_information">You must fill in all fields before creating this ride!</string>
-    <string name="login_footer">Having issues? Contact us at info@wheelzo.com</string>
+    <string name="slogan">Keeping the rideshare community accountable</string>
 
     <!-- Tab Names -->
     <string name="all_rides_tab">All Rides</string>

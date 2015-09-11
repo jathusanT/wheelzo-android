@@ -1,6 +1,7 @@
 package me.jathusan.android.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -25,6 +27,7 @@ public class LoginFragment extends Fragment {
     private static final int REAUTH_ACTIVITY_CODE = 100;
 
     private LoginButton mLoginButton;
+    private Button mContactButton;
     private UiLifecycleHelper mUiHelper;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -72,6 +75,17 @@ public class LoginFragment extends Fragment {
         mLoginButton = (LoginButton) rootView.findViewById(R.id.authButton);
         mLoginButton.setFragment(this);
         mLoginButton.setReadPermissions(Arrays.asList("public_profile"));
+
+        mContactButton = (Button) rootView.findViewById(R.id.contact_us_button);
+        mContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", getString(R.string.wheelzo_email), null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_email_title));
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email_with)));
+            }
+        });
         return rootView;
     }
 
