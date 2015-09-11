@@ -1,6 +1,7 @@
 package me.jathusan.android.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,11 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.okhttp.Response;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import me.jathusan.android.R;
+import me.jathusan.android.http.WheelzoHttpApi;
 import me.jathusan.android.model.Ride;
 import me.jathusan.android.model.RoundedImageView;
 import me.jathusan.android.util.ImageUtil;
@@ -86,7 +91,7 @@ public class RideInfoActivity extends BaseActivity {
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: deleteRide
+                new DeleteRideJob(mRide.getId()).execute();
                 finish();
             }
         });
@@ -137,6 +142,36 @@ public class RideInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    private class DeleteRideJob extends AsyncTask<Void, Void, Boolean> {
+
+        int mRideId;
+
+        public DeleteRideJob(int rideId) {
+            mRideId = rideId;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                Response response = WheelzoHttpApi.deleteRide(mRideId);
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, response.toString());
+                }
+                return response.isSuccessful();
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean successful) {
+            super.onPostExecute(successful);
+            if (!successful) {
+                Toast.makeText(RideInfoActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }

@@ -65,6 +65,7 @@ public class WheelzoHttpApi {
     }
 
     public static Response deleteRide(int rideID) throws IOException {
+        Log.d(TAG, rideID + "");
         Request request = new Request.Builder()
                 .url(API_BASE_URL + "/rides/index/" + rideID)
                 .addHeader("Content-Type", "application/json")
