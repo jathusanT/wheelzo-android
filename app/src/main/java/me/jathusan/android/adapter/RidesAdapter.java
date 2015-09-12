@@ -13,10 +13,12 @@ import me.jathusan.android.model.Ride;
 import me.jathusan.android.util.FormatUtil;
 
 public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> {
-    private ArrayList<Ride> mDataset;
+    private ArrayList<Ride> mDataset = new ArrayList<Ride>();
+    private ArrayList<Ride> mDataToDisplay = new ArrayList<Ride>();
 
     public RidesAdapter(ArrayList<Ride> myDataset) {
         mDataset = myDataset;
+        mDataToDisplay = mDataset;
     }
 
     @Override
@@ -28,7 +30,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Ride currentRide = mDataset.get(position);
+        Ride currentRide = mDataToDisplay.get(position);
         holder.mDesintation.setText(currentRide.getDestination());
         holder.mOrigin.setText("Departing from " + currentRide.getOrigin());
         holder.mPrice.setText(FormatUtil.formatDollarAmount(currentRide.getPrice()));
@@ -38,7 +40,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return mDataToDisplay.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -53,6 +55,21 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
             mOrigin = (TextView) view.findViewById(R.id.origin_text);
             mDate = (TextView) view.findViewById(R.id.date_text);
         }
+    }
+
+    public void filter(String searchText) {
+        ArrayList<Ride> results = new ArrayList<Ride>();
+        if (searchText == null || searchText.length() == 0) {
+            mDataToDisplay = mDataset;
+        } else {
+            for (Ride ride : mDataset) {
+                if (ride.getDestination().toLowerCase().contains(searchText.toLowerCase())) {
+                    results.add(ride);
+                }
+            }
+            mDataToDisplay = results;
+        }
+        notifyDataSetChanged();
     }
 
 

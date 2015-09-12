@@ -54,6 +54,7 @@ public class MyRidesFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my_rides, container, false);
+        setHasOptionsMenu(false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_rides_recycler_view);
         mRecyclerViewLayoutManager = new LinearLayoutManager(getActivity());
@@ -64,7 +65,6 @@ public class MyRidesFragment extends android.support.v4.app.Fragment {
             public void onItemClick(View view, int position) {
                 Intent rideInfo = new Intent(getActivity(), RideInfoActivity.class);
                 rideInfo.putExtra(RideInfoActivity.RIDE_PARCELABLE_KEY, mAvailableRides.get(position));
-                rideInfo.putExtra(RideInfoActivity.MY_RIDE_KEY, true);
                 startActivity(rideInfo);
             }
         }));

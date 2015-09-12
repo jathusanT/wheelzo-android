@@ -2,6 +2,7 @@ package me.jathusan.android.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Comment comment = mDataset.get(position);
-        holder.mComment.setText(comment.getComment());
+        holder.mComment.setText(Html.fromHtml(comment.getComment()));
         holder.mUserName.setText(comment.getUserName());
         holder.mTimestamp.setText(convertDate(comment.getLastUpdated()));
         ImageUtil.loadFacebookImageIntoView(mContext, comment.getFacebookId(), holder.mUserImage);

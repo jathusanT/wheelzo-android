@@ -41,6 +41,7 @@ public class MyAccountFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my_account, container, false);
+        setHasOptionsMenu(false);
         mUserAccount = (TextView) rootView.findViewById(R.id.user_account);
         mFacebookPicture = (RoundedImageView) rootView.findViewById(R.id.rounded_profile);
         mLogoutButton = (Button) rootView.findViewById(R.id.logout_button);

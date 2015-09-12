@@ -1,24 +1,12 @@
 package me.jathusan.android.activities;
 
-import android.animation.LayoutTransition;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.facebook.AppEventsLogger;
-import com.facebook.Session;
 
 import me.jathusan.android.R;
 import me.jathusan.android.adapter.WheelzoPagerAdapter;
@@ -32,10 +20,6 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
-
-    /* Search */
-    private SearchView mSearchView = null;
-    private MenuItem mSearchItem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,61 +78,6 @@ public class MainActivity extends BaseActivity {
         // Facebook analytics
         AppEventsLogger.deactivateApp(this);
         super.onPause();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-
-        mSearchItem = menu.findItem(R.id.action_search);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
-        if (mSearchView != null) {
-            mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String s) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String s) {
-                    return false;
-                }
-            });
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        if (mSearchView != null) {
-            mSearchView.setQueryHint(getString(R.string.search_hint));
-            int searchBarId = mSearchView.getContext().getResources().getIdentifier("android:id/search_bar", null, null);
-            LinearLayout searchBar = (LinearLayout) mSearchView.findViewById(searchBarId);
-            searchBar.setLayoutTransition(new LayoutTransition());
-
-            // Search Plate design
-            int searchPlateId = mSearchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
-            View searchPlate = mSearchView.findViewById(searchPlateId);
-            if (searchPlate != null) {
-                searchPlate.setBackgroundResource(R.drawable.rounded_rectangle);
-                int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-                TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
-                if (searchText != null) {
-                    searchText.setTextColor(Color.WHITE);
-                    searchText.setHintTextColor(Color.LTGRAY);
-                }
-            }
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_search) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void initializeActionBar() {

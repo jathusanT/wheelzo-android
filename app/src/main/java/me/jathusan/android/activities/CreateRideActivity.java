@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -94,10 +95,11 @@ public class CreateRideActivity extends BaseActivity {
                 mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH),
                 mCalendar.get(Calendar.DAY_OF_MONTH));
 
-        mDateEditText.setOnClickListener(new View.OnClickListener() {
+        mDateEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
                 mDatePickerDialog.show();
+                return true;
             }
         });
 
@@ -110,10 +112,11 @@ public class CreateRideActivity extends BaseActivity {
         };
         mTimePickerDialog = new TimePickerDialog(CreateRideActivity.this, timeSetListener,
                 mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), false);
-        mTimeEditText.setOnClickListener(new View.OnClickListener() {
+        mTimeEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
                 mTimePickerDialog.show();
+                return true;
             }
         });
 

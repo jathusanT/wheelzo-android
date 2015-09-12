@@ -15,3 +15,32 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn rx.**
+
+-dontwarn okio.**
+
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class android.support.v7.app.** { *; }
+-keep interface android.support.v7.app.** { *; }
+
+-keep class com.android.** { *; }
+-keep class com.google.** { *; }
+
+-keep class com.facebook.** {
+   *;
+}
+
+-dontwarn retrofit.**
+-dontwarn retrofit.appengine.UrlFetchClient
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+
+-keepattributes Signature
+-keepattributes *Annotation*

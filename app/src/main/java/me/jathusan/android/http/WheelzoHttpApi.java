@@ -17,7 +17,7 @@ public class WheelzoHttpApi {
 
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "WheelzoHttpApi";
-    private static final String API_BASE_URL = "http://staging.wheelzo.com/api/v2";
+    private static final String API_BASE_URL = "https://wheelzo.com/api/v2";
     private static final String HEADER_FB_TOKEN = "Fb-Wheelzo-Token";
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
 

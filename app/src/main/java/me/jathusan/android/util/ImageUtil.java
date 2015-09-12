@@ -15,25 +15,20 @@ import java.net.URL;
 
 import me.jathusan.android.model.RoundedImageView;
 
-/**
- * Created by jathusan on 7/11/15.
- */
 public class ImageUtil {
+
+    private static final String TAG = "ImageUtil";
+    private static final String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
 
     public static void loadFacebookImageIntoView(Context context, String facebookId, RoundedImageView imageView) {
         new FetchFacebookImage(context, facebookId, imageView).execute();
     }
 
-    public static Intent getOpenFacebookIntent(Context context, String facebookId) {
-        try {
-            context.getPackageManager()
-                    .getPackageInfo("com.facebook.katana", 0); //Checks if FB is even installed.
-            return new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("fb://profile/" + facebookId)); //Trys to make intent with FB's URI
-        } catch (Exception e) {
-            return new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://www.facebook.com/sentiapps")); //catches and opens a url to the desired page
-        }
+    public static Intent getOpenFacebookIntent(String facebookId) {
+        Intent intent;
+        intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://www.facebook.com/" + facebookId));
+        return intent;
     }
 
     private static class FetchFacebookImage extends AsyncTask<Void, Void, Bitmap> {
@@ -73,7 +68,7 @@ public class ImageUtil {
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent fbIntent = getOpenFacebookIntent(mContext, mFacebookId);
+                        Intent fbIntent = getOpenFacebookIntent(mFacebookId);
                         mContext.startActivity(fbIntent);
                     }
                 });

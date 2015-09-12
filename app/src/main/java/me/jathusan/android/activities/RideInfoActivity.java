@@ -1,5 +1,7 @@
 package me.jathusan.android.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -28,7 +30,6 @@ public class RideInfoActivity extends BaseActivity {
 
     /* Keys */
     public static final String RIDE_PARCELABLE_KEY = "me.jathusan.wheelzo.Ride";
-    public static final String MY_RIDE_KEY = "wheelzo_my_ride_key";
 
     private TextView mOrigin;
     private TextView mDestination;
@@ -91,8 +92,24 @@ public class RideInfoActivity extends BaseActivity {
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DeleteRideJob(mRide.getId()).execute();
-                finish();
+                new AlertDialog.Builder(RideInfoActivity.this)
+                        .setTitle(R.string.delete_confirmation_title)
+                        .setMessage(R.string.delete_confirmation_message)
+                        .setPositiveButton(getString(R.string.delete_confirmation_yes),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        new DeleteRideJob(mRide.getId()).execute();
+                                        finish();
+                                    }
+                                })
+                        .setNegativeButton(getResources().getString(R.string.delete_confirmation_no),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        // noop
+                                    }
+                                })
+                        .setCancelable(false)
+                        .show();
             }
         });
 
@@ -104,8 +121,7 @@ public class RideInfoActivity extends BaseActivity {
         mCapacity = (TextView) findViewById(R.id.cap_text);
         mPrice = (TextView) findViewById(R.id.price_text);
 
-        boolean isAdmin = bundle.getBoolean(MY_RIDE_KEY, false);
-        if (isAdmin) {
+        if (mRide.isPersonal()) {
             mProfileButton.setVisibility(View.GONE);
             mDeleteButton.setVisibility(View.VISIBLE);
         }

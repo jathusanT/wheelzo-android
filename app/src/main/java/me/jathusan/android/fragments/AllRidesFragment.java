@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -27,8 +31,8 @@ import me.jathusan.android.R;
 import me.jathusan.android.activities.RideInfoActivity;
 import me.jathusan.android.adapter.RecyclerItemClickListener;
 import me.jathusan.android.adapter.RidesAdapter;
-import me.jathusan.android.model.Ride;
 import me.jathusan.android.http.WheelzoHttpApi;
+import me.jathusan.android.model.Ride;
 
 public class AllRidesFragment extends android.support.v4.app.Fragment {
 
@@ -43,6 +47,10 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
     private TextView mNoResults;
     private ProgressBar mSpinner;
 
+    /* Search */
+    private android.support.v7.widget.SearchView mSearchView = null;
+    private MenuItem mSearchItem = null;
+
     public AllRidesFragment() {
     }
 
@@ -50,6 +58,7 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_all_rides, container, false);
+        setHasOptionsMenu(true);
 
         mNoResults = (TextView) rootView.findViewById(R.id.noResults);
         mNoResults.setVisibility(View.GONE);
@@ -99,6 +108,44 @@ public class AllRidesFragment extends android.support.v4.app.Fragment {
             }
         });
         new FetchRidesJob().execute();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu, menu);
+        mSearchItem = menu.findItem(R.id.action_search);
+        mSearchView = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(mSearchItem);
+        if (mSearchView != null) {
+            mSearchView.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    ((RidesAdapter) mRecyclerViewAdapter).filter(s);
+                    return true;
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mSearchView != null) {
+            mSearchView.setQueryHint(getString(R.string.search_hint));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private int getColorForPrice(int price) {
